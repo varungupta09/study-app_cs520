@@ -1,0 +1,70 @@
+/* Navbar Styles */
+.navbar {
+  display: flex;
+  justify-content: space-between; /* Ensures space between elements */
+  align-items: center; /* Vertically aligns navbar content */
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%; /* Ensure navbar spans the entire width */
+  box-sizing: border-box;
+}
+
+/* Navbar Logo */
+.navbar-logo h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+/* Navbar Links */
+.navbar-links {
+  display: flex;
+  gap: 15px; /* Spacing between items */
+  align-items: center; /* Ensure vertical alignment */
+  margin-left: auto; /* Push the links to the right */
+}
+
+/* Navbar Link and Button */
+.navbar-link, .navbar-button {
+  color: white;
+  font-size: 18px;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  padding: 8px 16px; /* Consistent padding for all buttons */
+  border-radius: 4px; /* Optional: Adds rounded corners */
+}
+
+/* Hover and Focus States */
+.navbar-link:hover, .navbar-button:hover {
+  color: #ddd;
+  background-color: rgba(255, 255, 255, 0.2); /* Slight background change on hover */
+}
+
+.navbar-link:focus, .navbar-button:focus {
+  outline: none;
+}
+
+/* Adjustments for consistent button height and spacing */
+.navbar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensures no additional margins or padding are inherited by navbar items */
+.navbar-link,
+.navbar-button {
+  margin: 0; /* Remove any extra margin */
+}
+
+/* Fixing alignment in case there is any conflicting styling in .study-set-page */
+.study-set-page > .navbar {
+  display: block; /* Prevent flex from affecting navbar layout */
+  width: 100%;
+}
