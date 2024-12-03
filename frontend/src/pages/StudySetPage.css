@@ -266,3 +266,8 @@ ul li a:hover {
     font-size: 1.1em;
   }
 }
+
+.file-marked-delete span {
+  text-decoration: line-through;
+  color: red; /* Optional: make it visually distinct */
+}

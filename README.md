@@ -7,3 +7,4 @@ cd frontend --> npm start
 
 To start the backend
 cd backend --> cd src --> node server.js
+

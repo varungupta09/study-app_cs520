@@ -2,112 +2,132 @@
 const db = require('../database');
 const path = require('path');
 const fs = require('fs');
+const gemini = require('../gemini_functions/gemini_functions.js'); // Import gemini functions
 
-const createStudySet = (req, res) => {
-  const { userId, name, description } = req.body;
+// Helper function for starting a transaction
+const startTransaction = () => {
+  db.run('BEGIN TRANSACTION');
+};
 
-  // Input validation
-  if (!userId) {
-    return res.status(400).json({ error: 'User ID is required.' });
-  }
+// Helper function for committing a transaction
+const commitTransaction = () => {
+  db.run('COMMIT');
+};
 
-  if (!name) {
-    return res.status(400).json({ error: 'Study set name is required.' });
-  }
+// Helper function for rolling back a transaction
+const rollbackTransaction = () => {
+  db.run('ROLLBACK');
+};
 
-  // Get the current timestamp
-  const currentTimestamp = new Date().toISOString();
+// Helper function to create the upload directory if it doesn't exist
+const createUploadDirectory = (userId, studySetId) => {
+  const uploadDir = path.join('./uploads', userId.toString(), studySetId.toString());
+  fs.mkdirSync(uploadDir, { recursive: true });
+  return uploadDir;
+};
 
-  // Start a database transaction
-  db.serialize(() => {
-    db.run('BEGIN TRANSACTION'); // Begin transaction
+// Helper function to move files to the final directory
+const moveFileToFinalDirectory = (file, uploadDir) => {
+  return new Promise((resolve, reject) => {
+    const finalFilePath = path.join(uploadDir, file.filename);
+    fs.rename(file.path, finalFilePath, (err) => {
+      if (err) {
+        reject(new Error('Error moving file: ' + err));
+      } else {
+        resolve(finalFilePath);
+      }
+    });
+  });
+};
 
-    // Insert into the study_sets table with creation_date and modification_date
+// Helper function to insert file path into the database
+const insertFilePathToDb = (studySetId, filePath) => {
+  return new Promise((resolve, reject) => {
     db.run(
-      'INSERT INTO study_sets (user_id, name, description, creation_date, modification_date) VALUES (?, ?, ?, ?, ?)',
-      [userId, name, description || null, currentTimestamp, currentTimestamp],
+      'INSERT INTO study_set_files (study_set_id, file_path) VALUES (?, ?)',
+      [studySetId, filePath],
       function (err) {
         if (err) {
-          db.run('ROLLBACK'); // Rollback if insert fails
-          console.error('Error creating study set:', err);
-          return res.status(500).json({ error: 'Error creating study set.' });
+          reject(new Error('Error inserting file into database: ' + err));
+        } else {
+          resolve();
         }
-
-        const studySetId = this.lastID; // Get the inserted study set's ID
-
-        // Define the final upload directory
-        const finalUploadDir = `./uploads/${userId}/${studySetId}`;
-        fs.mkdirSync(finalUploadDir, { recursive: true }); // Ensure the directory exists
-
-        // If no files are uploaded, commit the transaction and respond
-        if (!req.files || req.files.length === 0) {
-          db.run('COMMIT'); // Commit the transaction
-          return res.status(201).json({
-            message: 'Study set created successfully without files.',
-            id: studySetId,
-            name: name,
-            description: description,
-            files: []
-          });
-        }
-
-        // Process file uploads: move files to final directory and insert paths into database
-        const filePromises = req.files.map((file) => {
-          return new Promise((resolve, reject) => {
-            const finalFilePath = path.join(finalUploadDir, file.filename);
-
-            // Move the file to the final directory
-            fs.rename(file.path, finalFilePath, (err) => {
-              if (err) {
-                console.error('Error moving file:', err);
-                reject(err);
-              } else {
-                // Insert file path into study_set_files table
-                db.run(
-                  'INSERT INTO study_set_files (study_set_id, file_path) VALUES (?, ?)',
-                  [studySetId, finalFilePath],
-                  function (err) {
-                    if (err) {
-                      console.error('Error inserting file into database:', err);
-                      reject(err);
-                    } else {
-                      resolve();
-                    }
-                  }
-                );
-              }
-            });
-          });
-        });
-
-        // Wait for all file operations to complete
-        Promise.all(filePromises)
-          .then(() => {
-            db.run('COMMIT'); // Commit the transaction after successful file uploads
-            res.status(201).json({
-              message: 'Study set created successfully with files.',
-              id: studySetId,
-              name: name,
-              description: description,
-              files: req.files.map(file => ({
-                originalName: file.originalname,
-                finalPath: path.join(finalUploadDir, file.filename)
-              }))
-            });
-          })
-          .catch((error) => {
-            db.run('ROLLBACK'); // Rollback if an error occurred during file upload
-            console.error('File upload error:', error);
-            res.status(500).json({ error: 'Error uploading files.' });
-          });
       }
     );
   });
 };
 
-// Route to get all study sets
+// Controller to create a new study set
+const createStudySet = (req, res) => {
+  const { userId, name, description } = req.body;
+
+  if (!userId || !name) {
+    return res.status(400).json({ error: 'User ID and Study Set name are required.' });
+  }
+
+  const currentTimestamp = new Date().toISOString();
+
+  startTransaction();
+
+  db.run(
+    'INSERT INTO study_sets (user_id, name, description, creation_date, modification_date) VALUES (?, ?, ?, ?, ?)',
+    [userId, name, description || null, currentTimestamp, currentTimestamp],
+    function (err) {
+      if (err) {
+        rollbackTransaction();
+        console.error('Error creating study set:', err);
+        return res.status(500).json({ error: 'Error creating study set.' });
+      }
+
+      const studySetId = this.lastID;
+      const uploadDir = createUploadDirectory(userId, studySetId);
+
+      if (!req.files || req.files.length === 0) {
+        commitTransaction();
+        return res.status(201).json({
+          message: 'Study set created successfully without files.',
+          id: studySetId,
+          name,
+          description,
+          files: []
+        });
+      }
+
+      const filePromises = req.files.map((file) => {
+        return moveFileToFinalDirectory(file, uploadDir)
+          .then((finalFilePath) => insertFilePathToDb(studySetId, finalFilePath))
+          .catch((err) => {
+            console.error(err);
+            throw err;
+          });
+      });
+
+      Promise.all(filePromises)
+        .then(() => {
+          commitTransaction();
+          res.status(201).json({
+            message: 'Study set created successfully with files.',
+            id: studySetId,
+            name,
+            description,
+            files: req.files.map((file) => ({
+              originalName: file.originalname,
+              finalPath: path.join(uploadDir, file.filename)
+            }))
+          });
+        })
+        .catch((error) => {
+          rollbackTransaction();
+          console.error('File upload error:', error);
+          res.status(500).json({ error: 'Error uploading files.' });
+        });
+    }
+  );
+};
+
+// Controller to get all study sets for a user
 const getAllStudySets = (req, res) => {
-  const userId = req.query.userId; // Get userId from query parameters
+  const { userId } = req.query;
 
   if (!userId) {
     return res.status(400).json({ error: 'User ID is required.' });
@@ -122,9 +142,10 @@ const getAllStudySets = (req, res) => {
   });
 };
 
-// Route to get files for a specific study set
+// Controller to get files for a specific study set
 const getFilesForStudySet = (req, res) => {
-  const studySetId = req.params.id;
+  const { id: studySetId } = req.params;
+
   db.all('SELECT * FROM study_set_files WHERE study_set_id = ?', [studySetId], (err, rows) => {
     if (err) {
       return res.status(500).json({ error: 'Error fetching files.' });
@@ -133,207 +154,381 @@ const getFilesForStudySet = (req, res) => {
   });
 };
 
-// Route to get specific study set details
+// Controller to get details of a specific study set
 const getStudySetDetails = (req, res) => {
-  const studySetId = req.params.id;
+  const { id: studySetId } = req.params;
 
-  // Query to get study set details based on the study_set_id
-  const studySetQuery = 'SELECT * FROM study_sets WHERE id = ?';
-
-  db.get(studySetQuery, [studySetId], (err, studySet) => {
+  db.get('SELECT * FROM study_sets WHERE id = ?', [studySetId], (err, studySet) => {
     if (err) {
       return res.status(500).json({ error: 'Error fetching study set details.' });
     }
-
-    // If study set is not found
     if (!studySet) {
       return res.status(404).json({ error: 'Study set not found.' });
     }
 
-    // Query to get files associated with the study set
-    const filesQuery = 'SELECT * FROM study_set_files WHERE study_set_id = ?';
-    db.all(filesQuery, [studySetId], (err, files) => {
+    db.all('SELECT * FROM study_set_files WHERE study_set_id = ?', [studySetId], (err, files) => {
       if (err) {
         return res.status(500).json({ error: 'Error fetching study set files.' });
       }
 
-      // Construct the response
-      const response = {
+      res.json({
         study_set_id: studySet.id,
         user_id: studySet.user_id,
         name: studySet.name,
         description: studySet.description,
         creation_date: studySet.creation_date,
         modification_date: studySet.modification_date,
-        files: files.map(file => ({
+        files: files.map((file) => ({
           file_id: file.id,
           file_path: file.file_path
         }))
-      };
-
-      // Send the response
-      res.json(response);
+      });
     });
   });
 };
 
+// Controller to update a study set
 const updateStudySet = (req, res) => {
   const { name, description } = req.body;
-  const studySetId = req.params.id;
+  const { id: studySetId } = req.params;
 
-  // Input validation
   if (!name || !studySetId) {
     return res.status(400).json({ error: 'Name and Study Set ID are required.' });
   }
 
-  // Get the current timestamp for the modification date
   const currentTimestamp = new Date().toISOString();
 
-  db.serialize(() => {
-    db.run('BEGIN TRANSACTION'); // Begin transaction
+  startTransaction();
 
-    // Update the study set in the database
-    db.run(
-      'UPDATE study_sets SET name = ?, description = ?, modification_date = ? WHERE id = ?',
-      [name, description || null, currentTimestamp, studySetId],
-      function (err) {
-        if (err) {
-          db.run('ROLLBACK'); // Rollback if update fails
-          console.error('Error updating study set:', err);
-          return res.status(500).json({ error: 'Error updating study set.' });
+  db.run(
+    'UPDATE study_sets SET name = ?, description = ?, modification_date = ? WHERE id = ?',
+    [name, description || null, currentTimestamp, studySetId],
+    function (err) {
+      if (err) {
+        rollbackTransaction();
+        console.error('Error updating study set:', err);
+        return res.status(500).json({ error: 'Error updating study set.' });
+      }
+
+      if (!req.files || req.files.length === 0) {
+        commitTransaction();
+        return res.status(200).json({ message: 'Study set updated successfully without files.' });
+      }
+
+      db.get('SELECT user_id FROM study_sets WHERE id = ?', [studySetId], (err, row) => {
+        if (err || !row) {
+          rollbackTransaction();
+          console.error('Error fetching user ID:', err || 'Study set not found');
+          return res.status(500).json({ error: 'Error fetching study set details.' });
         }
 
-        // If no files are uploaded, commit transaction and respond
-        if (!req.files || req.files.length === 0) {
-          db.run('COMMIT'); // Commit transaction
-          return res.status(200).json({ message: 'Study set updated successfully without files.' });
-        }
+        const uploadDir = createUploadDirectory(row.user_id, studySetId);
 
-        // Fetch the userId associated with the study set to organize file storage
-        db.get('SELECT user_id FROM study_sets WHERE id = ?', [studySetId], (err, row) => {
-          if (err || !row) {
-            db.run('ROLLBACK'); // Rollback if fetching user_id fails
-            console.error('Error fetching user ID:', err || 'Study set not found');
-            return res.status(500).json({ error: 'Error fetching study set details.' });
-          }
-
-          const userId = row.user_id;
-          const finalUploadDir = `./uploads/${userId}/${studySetId}`;
-
-          // Ensure the directory exists
-          fs.mkdirSync(finalUploadDir, { recursive: true });
-
-          // Process file uploads: move files to the final directory and insert paths into the database
-          const filePromises = req.files.map((file) => {
-            return new Promise((resolve, reject) => {
-              const finalFilePath = path.join(finalUploadDir, file.filename);
-
-              // Move the file to the final directory
-              fs.rename(file.path, finalFilePath, (err) => {
-                if (err) {
-                  console.error('Error moving file:', err);
-                  reject(err);
-                } else {
-                  // Insert file path into the study_set_files table
-                  db.run(
-                    'INSERT INTO study_set_files (study_set_id, file_path) VALUES (?, ?)',
-                    [studySetId, finalFilePath],
-                    function (err) {
-                      if (err) {
-                        console.error('Error inserting file into database:', err);
-                        reject(err);
-                      } else {
-                        resolve();
-                      }
-                    }
-                  );
-                }
-              });
-            });
-          });
-
-          // Wait for all file operations to complete
-          Promise.all(filePromises)
-            .then(() => {
-              db.run('COMMIT'); // Commit the transaction after successful file uploads
-              res.status(200).json({ message: 'Study set updated successfully with files.' });
-            })
-            .catch((error) => {
-              db.run('ROLLBACK'); // Rollback if an error occurred during file upload
-              console.error('File upload error:', error);
-              res.status(500).json({ error: 'Error uploading files.' });
+        const filePromises = req.files.map((file) => {
+          return moveFileToFinalDirectory(file, uploadDir)
+            .then((finalFilePath) => insertFilePathToDb(studySetId, finalFilePath))
+            .catch((err) => {
+              console.error(err);
+              throw err;
             });
         });
+
+        Promise.all(filePromises)
+          .then(() => {
+            commitTransaction();
+            res.status(200).json({ message: 'Study set updated successfully with files.' });
+          })
+          .catch((error) => {
+            rollbackTransaction();
+            console.error('File upload error:', error);
+            res.status(500).json({ error: 'Error uploading files.' });
+          });
+      });
+    }
+  );
+};
+
+// Controller to delete a study set
+const deleteStudySet = (req, res) => {
+  const { id: studySetId } = req.params;
+
+  startTransaction();
+
+  db.get('SELECT user_id FROM study_sets WHERE id = ?', [studySetId], (err, row) => {
+    if (err || !row) {
+      rollbackTransaction();
+      console.error('Error fetching user ID:', err || 'Study set not found.');
+      return res.status(500).json({ error: 'Error fetching study set details.' });
+    }
+
+    const studySetDir = path.join('./uploads', row.user_id.toString(), studySetId.toString());
+
+    db.run('DELETE FROM study_set_files WHERE study_set_id = ?', [studySetId], function (err) {
+      if (err) {
+        rollbackTransaction();
+        console.error('Error deleting files:', err);
+        return res.status(500).json({ error: 'Error deleting files.' });
       }
-    );
+
+      db.run('DELETE FROM study_sets WHERE id = ?', [studySetId], function (err) {
+        if (err) {
+          rollbackTransaction();
+          console.error('Error deleting study set:', err);
+          return res.status(500).json({ error: 'Error deleting study set.' });
+        }
+
+        fs.rmSync(studySetDir, { recursive: true, force: true });
+
+        commitTransaction();
+        res.status(200).json({ message: 'Study set deleted successfully.' });
+      });
+    });
   });
 };
 
-const deleteStudySet = (req, res) => {
-  const studySetId = req.params.id;
-
-  // Start a database transaction
-  db.serialize(() => {
-    db.run('BEGIN TRANSACTION'); // Begin transaction
-
-    // Fetch the userId associated with the study set
-    db.get('SELECT user_id FROM study_sets WHERE id = ?', [studySetId], (err, row) => {
-      if (err || !row) {
-        db.run('ROLLBACK'); // Rollback if userId fetching fails
-        console.error('Error fetching user ID:', err || 'Study set not found.');
-        return res.status(500).json({ error: 'Error fetching study set details.' });
+// Helper function to delete a file from the filesystem
+const deleteFileFromFolder = (filePath) => {
+  return new Promise((resolve, reject) => {
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        reject(new Error('Error deleting file from folder: ' + err));
+      } else {
+        resolve();
       }
-
-      const userId = row.user_id;
-      const studySetDir = path.join('./uploads', userId.toString(), studySetId.toString());
-
-      // Delete the associated files from the study_set_files table
-      db.run(
-        'DELETE FROM study_set_files WHERE study_set_id = ?',
-        [studySetId],
-        function (err) {
-          if (err) {
-            db.run('ROLLBACK'); // Rollback if file deletion fails
-            console.error('Error deleting files:', err);
-            return res.status(500).json({ error: 'Error deleting files.' });
-          }
-
-          // Delete the study set itself from the study_sets table
-          db.run(
-            'DELETE FROM study_sets WHERE id = ?',
-            [studySetId],
-            function (err) {
-              if (err) {
-                db.run('ROLLBACK'); // Rollback if study set deletion fails
-                console.error('Error deleting study set:', err);
-                return res.status(500).json({ error: 'Error deleting study set.' });
-              }
-
-              // Delete the study set directory
-              fs.rm(studySetDir, { recursive: true, force: true }, (err) => {
-                if (err) {
-                  db.run('ROLLBACK'); // Rollback if directory deletion fails
-                  console.error('Error deleting study set directory:', err);
-                  return res.status(500).json({ error: 'Error deleting study set directory.' });
-                }
-
-                // Commit the transaction after successful deletion
-                db.run('COMMIT');
-                res.status(200).json({ message: 'Study set and associated directory deleted successfully.' });
-              });
-            }
-          );
-        }
-      );
     });
+  });
+};
+
+// Helper function to delete file entry from the database
+const deleteFileFromDb = (fileId) => {
+  return new Promise((resolve, reject) => {
+    db.run('DELETE FROM study_set_files WHERE id = ?', [fileId], function (err) {
+      if (err) {
+        reject(new Error('Error deleting file from database: ' + err));
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+// Helper function to delete a file from both the database and the folder
+const deleteFileFromDbAndFolder = (fileId, filePath) => {
+  return deleteFileFromDb(fileId)
+    .then(() => deleteFileFromFolder(filePath))
+    .catch((err) => {
+      throw err;
+    });
+};
+
+// Controller to delete a specific file from a study set
+const deleteFileFromStudySet = (req, res) => {
+  const { fileId } = req.params;
+
+  if (!fileId) {
+    return res.status(400).json({ error: 'File ID is required.' });
+  }
+
+  // Get the file path from the database
+  db.get('SELECT file_path FROM study_set_files WHERE id = ?', [fileId], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error fetching file path from database.' });
+    }
+    if (!row) {
+      return res.status(404).json({ error: 'File not found.' });
+    }
+
+    // Use the helper function to delete the file
+    deleteFileFromDbAndFolder(fileId, row.file_path)
+      .then(() => {
+        res.status(200).json({ message: 'File deleted successfully.' });
+      })
+      .catch((error) => {
+        console.error('Error deleting file:', error);
+        res.status(500).json({ error: 'Error deleting file.' });
+      });
+  });
+};
+
+// Controller to fetch study guides for a specific study set
+const getStudyGuidesForStudySet = (req, res) => {
+  const { id: studySetId } = req.params;
+
+  db.all('SELECT * FROM study_guides WHERE study_set_id = ?', [studySetId], (err, rows) => {
+    if (err) {
+      console.error('Error fetching study guides:', err);
+      return res.status(500).json({ error: 'Error fetching study guides.' });
+    }
+    res.json(rows);
+  });
+};
+
+// Controller to create a new study guide
+const createStudyGuide = (req, res) => {
+  const { id: studySetId } = req.params;
+
+  // Step 1: Fetch all files for the given study set from the database
+  db.all('SELECT file_path FROM study_set_files WHERE study_set_id = ?', [studySetId], (err, rows) => {
+    if (err) {
+      console.error('Error fetching files:', err);
+      return res.status(500).json({ error: 'Error fetching files.' });
+    }
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'No files found for the given study set.' });
+    }
+
+    // Step 2: Extract the file paths from the result
+    const filePaths = rows.map(row => row.file_path);
+
+    console.log(filePaths)
+
+    // Step 3: Pass the file paths to the gemini.createStudyGuide function
+    gemini.createStudyGuide(filePaths)
+      .then(guideContent => {
+        // Step 4: Use the result as the guide_content
+        db.run(
+          'INSERT INTO study_guides (study_set_id, guide_content) VALUES (?, ?)',
+          [studySetId, guideContent],
+          function (err) {
+            if (err) {
+              console.error('Error saving study guide:', err);
+              return res.status(500).json({ error: 'Error saving study guide.' });
+            }
+
+            res.status(201).json({
+              message: 'Study guide created successfully.',
+              study_set_id: studySetId,
+              guide_content: guideContent
+            });
+          }
+        );
+      })
+      .catch((error) => {
+        console.error('Error creating study guide:', error);
+        res.status(500).json({ error: 'Error creating study guide.' });
+      });
+  });
+};
+
+// Controller to delete a study guide
+const deleteStudyGuide = (req, res) => {
+  const { id: studySetId, guideId } = req.params;
+
+  db.run(
+    'DELETE FROM study_guides WHERE id = ? AND study_set_id = ?',
+    [guideId, studySetId],
+    function (err) {
+      if (err) {
+        console.error('Error deleting study guide:', err);
+        return res.status(500).json({ error: 'Error deleting study guide.' });
+      }
+      if (this.changes === 0) {
+        return res.status(404).json({ error: 'Study guide not found.' });
+      }
+      res.json({ message: 'Study guide deleted successfully.' });
+    }
+  );
+};
+
+// Controller to get all quizzes for a specific study set
+const getQuizzesForStudySet = (req, res) => {
+  const { id: studySetId } = req.params;
+
+  db.all('SELECT * FROM quizzes WHERE study_set_id = ?', [studySetId], (err, rows) => {
+    if (err) {
+      console.error('Error fetching study guides:', err);
+      return res.status(500).json({ error: 'Error fetching study guides.' });
+    }
+    res.json(rows);
+  });
+};
+
+// Controller to get all quizzes for a specific study set
+const getQuizForStudySet = (req, res) => {
+  const { id: quizId } = req.params;
+
+  db.all('SELECT quiz_content FROM quizzes WHERE id = ?', [quizId], (err, rows) => {
+    if (err) {
+      console.error('Error fetching study guides:', err);
+      return res.status(500).json({ error: 'Error fetching study guides.' });
+    }
+    res.json(rows);
+  });
+};
+
+// Controller to create a new quiz
+const createQuiz = (req, res) => {
+  const { id: studySetId } = req.params;
+
+  // Step 1: Fetch all files for the given study set from the database
+  db.all('SELECT file_path FROM study_set_files WHERE study_set_id = ?', [studySetId], (err, rows) => {
+    if (err) {
+      console.error('Error fetching files:', err);
+      return res.status(500).json({ error: 'Error fetching files.' });
+    }
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'No files found for the given study set.' });
+    }
+
+    // Step 2: Extract the file paths from the result
+    const filePaths = rows.map(row => row.file_path);
+
+    // Step 3: Pass the file paths to the gemini.createStudyGuide function
+    gemini.createQuiz(filePaths, 2)
+      .then(guideContent => {
+        // Step 4: Use the result as the guide_content
+        db.run(
+          'INSERT INTO quizzes (study_set_id, quiz_content) VALUES (?, ?)',
+          [studySetId, guideContent],
+          function (err) {
+            if (err) {
+              console.error('Error saving quiz:', err);
+              return res.status(500).json({ error: 'Error saving quiz.' });
+            }
+
+            res.status(201).json({
+              message: 'Quiz created successfully.',
+              study_set_id: studySetId,
+              guide_content: guideContent
+            });
+          }
+        );
+      })
+      .catch((error) => {
+        console.error('Error creating quiz:', error);
+        res.status(500).json({ error: 'Error creating quiz.' });
+      });
+  });
+};
+
+// Controller to delete a quiz for a specific study set
+const deleteQuiz = (req, res) => {
+  const { id: studySetId, quizId } = req.params;
+
+  db.run('DELETE FROM quizzes WHERE id = ? AND study_set_id = ?', 
+    [quizId, studySetId], function (err) {
+    if (err) {
+      return res.status(500).json({ error: 'Error deleting quiz.' });
+    }
+    res.status(200).json({ message: 'Quiz deleted successfully.' });
   });
 };
 
 module.exports = {
   createStudySet,
   getAllStudySets,
-  getFilesForStudySet,
   getStudySetDetails,
+  getFilesForStudySet,
   updateStudySet,
-  deleteStudySet
+  deleteStudySet,
+  deleteFileFromStudySet,
+  getStudyGuidesForStudySet,
+  createStudyGuide,
+  deleteStudyGuide,
+  getQuizzesForStudySet,
+  getQuizForStudySet,
+  createQuiz,
+  deleteQuiz,
 };

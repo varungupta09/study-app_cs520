@@ -5,6 +5,9 @@ import StudySetsPage from './pages/StudySetsPage';
 import StudySetPage from './pages/StudySetPage';
 import NewProjectPage from './pages/NewProjectPage';
 import ProjectLibraryPage from './pages/ProjectLibraryPage';
+import StudyGuidePage from './pages/GenerateGuidePage';
+import CreateQuizPage from './pages/GenerateQuizPage';
+import QuizPage from './pages/QuizPage';
 import NavBar from './components/NavBar';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
@@ -55,6 +58,9 @@ function App() {
             <Route path="/project-libraryyyyyy" element={<ProjectLibraryPage />} />
             <Route path="/project-library" element={<StudySetsPage />} /> 
             <Route path="/study-sets/:studySetId" element={<StudySetPage />} />
+            <Route path="/study-set/:studySetId/generate-study-guide" element={<StudyGuidePage />} />
+            <Route path="/study-set/:studySetId/generate-quiz" element={<CreateQuizPage />} />
+            <Route path="/quiz/:quizId" element={<QuizPage />} />
             {/* Redirect to HomePage if authenticated */}
             <Route path="*" element={<Navigate to="/home-page" />} />
           </>

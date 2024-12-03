@@ -1,3 +1,4 @@
+// routes/studyRoutes.js
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
@@ -36,5 +37,26 @@ router.put('/study-set/:id', upload.array('files', 5), studyController.updateStu
 
 // Route to delete a study set
 router.delete('/study-set/:id', studyController.deleteStudySet);  // Add this line
+
+//Route to delete a file
+router.delete('/study-set/file/:fileId', studyController.deleteFileFromStudySet);
+
+// Routes for study guides
+router.get('/study-set/:id/study-guides', studyController.getStudyGuidesForStudySet); // Fetch study guides
+router.post('/study-set/:id/study-guides', studyController.createStudyGuide); // Create a study guide
+router.delete('/study-set/:id/study-guides/:guideId', studyController.deleteStudyGuide); // Delete a study guide
+
+// Route to fetch all quizzes for a specific study set
+router.get('/study-set/:id/quizzes', studyController.getQuizzesForStudySet);
+
+// Route to fetch a specific quiz for a specific study set
+router.get('/study-set/quiz/:id', studyController.getQuizForStudySet);
+
+// Route to create a quiz for a specific study set
+router.post('/study-set/:id/quizzes', studyController.createQuiz);
+
+// Route to delete a quiz for a specific study set
+router.delete('/study-set/:id/quizzes/:quizId', studyController.deleteQuiz);
+
 
 module.exports = router;

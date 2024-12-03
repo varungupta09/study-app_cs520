@@ -5,9 +5,16 @@ import './StudySetPage.css';
 const StudySetPage = () => {
   const { studySetId } = useParams();
   const [studySet, setStudySet] = useState({ name: '', description: '', files: [] });
+<<<<<<< HEAD
   const [originalStudySet, setOriginalStudySet] = useState(null);  // Store the original study set
   const [editMode, setEditMode] = useState(false);
   const [newFiles, setNewFiles] = useState([]);
+=======
+  const [originalStudySet, setOriginalStudySet] = useState(null); // Store the original study set
+  const [editMode, setEditMode] = useState(false);
+  const [newFiles, setNewFiles] = useState([]);
+  const [filesToDelete, setFilesToDelete] = useState([]); // Track files marked for deletion
+>>>>>>> alpha1.0
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false); // Confirmation state
@@ -21,7 +28,11 @@ const StudySetPage = () => {
         if (!response.ok) throw new Error('Failed to fetch study set.');
         const data = await response.json();
         setStudySet(data);
+<<<<<<< HEAD
         setOriginalStudySet(data);  // Store the original study set when fetched
+=======
+        setOriginalStudySet(data); // Store the original study set when fetched
+>>>>>>> alpha1.0
       } catch (error) {
         setError(error.message);
       } finally {
@@ -38,6 +49,21 @@ const StudySetPage = () => {
     setNewFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
   };
 
+<<<<<<< HEAD
+=======
+  // Mark file for deletion
+  const handleMarkForDeletion = (file) => {
+    // Check if file is already marked for deletion
+    setFilesToDelete((prev) => {
+      const updatedFiles = prev.includes(file) 
+        ? prev.filter((f) => f !== file) 
+        : [...prev, file];
+            
+      return updatedFiles;
+    });
+  };
+
+>>>>>>> alpha1.0
   // Handle study set updates
   const handleUpdateStudySet = async () => {
     if (!studySet) return;
@@ -58,35 +84,83 @@ const StudySetPage = () => {
 
       if (!response.ok) throw new Error('Failed to update study set.');
 
+<<<<<<< HEAD
+=======
+      // Handle file deletions
+      console.log(filesToDelete)
+
+      for (const file of filesToDelete) {
+        const fileId = file.file_id; // Assuming filePath is a property of the file object
+
+        try {
+          const response = await fetch(`http://localhost:5001/api/study-set/file/${fileId}`, {
+            method: 'DELETE',
+          });
+
+          if (response.ok) {
+            console.log(`File ${fileId} deleted successfully.`);
+          } else {
+            console.error(`Failed to delete file ${fileId}.`);
+          }
+        } catch (error) {
+          console.error(`Error deleting file ${fileId}:`, error);
+        }
+      }
+
+>>>>>>> alpha1.0
       // Fetch the latest study set data after the update
       const updatedStudySetResponse = await fetch(`http://localhost:5001/api/study-set/${studySetId}`);
       if (!updatedStudySetResponse.ok) throw new Error('Failed to fetch updated study set.');
       
       const updatedStudySet = await updatedStudySetResponse.json();
+<<<<<<< HEAD
       setStudySet(updatedStudySet);  // Update state with the updated study set
       setEditMode(false);
       setNewFiles([]);  // Clear new files after saving
+=======
+      setStudySet(updatedStudySet); // Update state with the updated study set
+      setEditMode(false);
+      setNewFiles([]); // Clear new files after saving
+      setFilesToDelete([]); // Clear files marked for deletion
+>>>>>>> alpha1.0
     } catch (error) {
       setError(error.message);
     }
   };
 
+<<<<<<< HEAD
+=======
+  // Handle cancel and reset to original state
+  const handleCancel = () => {
+    setStudySet(originalStudySet); // Reset to the original study set
+    setEditMode(false); // Exit edit mode
+    setNewFiles([]); // Clear new files
+    setFilesToDelete([]); // Clear files marked for deletion
+  };
+
+>>>>>>> alpha1.0
   // Handle study set deletion
   const handleDeleteStudySet = async () => {
     try {
       const response = await fetch(`http://localhost:5001/api/study-set/${studySetId}`, {
         method: 'DELETE',
       });
+<<<<<<< HEAD
 
       if (!response.ok) throw new Error('Failed to delete study set.');
 
       alert('Study set deleted successfully.');
       navigate('/study-sets');
+=======
+      if (!response.ok) throw new Error('Failed to delete study set.');
+      navigate('/project-library'); // Redirect to the study set library after deletion
+>>>>>>> alpha1.0
     } catch (error) {
       setError(error.message);
     }
   };
 
+<<<<<<< HEAD
   // Handle cancel and reset to original state
   const handleCancel = () => {
     setStudySet(originalStudySet);  // Reset to the original study set
@@ -108,6 +182,8 @@ const StudySetPage = () => {
   };
 
   // Render loading, error, and content based on states
+=======
+>>>>>>> alpha1.0
   if (loading) return <p>Loading study set...</p>;
   if (error) return <p className="error">{error}</p>;
 
@@ -123,26 +199,45 @@ const StudySetPage = () => {
             onChange={(e) => setStudySet({ ...studySet, name: e.target.value })}
             placeholder="Study Set Name"
             className="input-field"
+<<<<<<< HEAD
             aria-label="Study Set Name"
+=======
+>>>>>>> alpha1.0
           />
           <textarea
             value={studySet.description}
             onChange={(e) => setStudySet({ ...studySet, description: e.target.value })}
             placeholder="Study Set Description"
             className="input-field"
+<<<<<<< HEAD
             aria-label="Study Set Description"
           />
           
+=======
+          />
+
+>>>>>>> alpha1.0
           {/* Display current files in edit mode */}
           <div className="current-files">
             <h3>Current Files</h3>
             {studySet.files && studySet.files.length > 0 ? (
               <ul>
                 {studySet.files.map((file, index) => (
+<<<<<<< HEAD
                   <li key={index}>
                     <a href={`http://localhost:5001/${file.file_path}`} target="_blank" rel="noopener noreferrer">
                       {file.file_path}
                     </a>
+=======
+                  <li key={index} className={filesToDelete.includes(file) ? 'file-marked-delete' : ''}>
+                    <span>{file.file_path}</span>
+                    <button
+                      className="delete-file-button"
+                      onClick={() => handleMarkForDeletion(file)}
+                    >
+                      {filesToDelete.includes(file) ? 'Undo' : 'Delete'}
+                    </button>
+>>>>>>> alpha1.0
                   </li>
                 ))}
               </ul>
@@ -161,10 +256,15 @@ const StudySetPage = () => {
               multiple
               onChange={handleFileChange}
               className="input-field file-input"
+<<<<<<< HEAD
               accept=".txt,.doc,.docx,.ppt,.pptx"
               aria-label="Upload Files"
             />
             {/* Display newly selected files */}
+=======
+              accept=".txt,.doc,.docx,.ppt,.pptx,.pdf"
+            />
+>>>>>>> alpha1.0
             {newFiles.length > 0 && (
               <div className="new-files-preview">
                 <h3>New Files</h3>
@@ -197,12 +297,20 @@ const StudySetPage = () => {
             )}
           </ul>
           <button onClick={() => setEditMode(true)} className="edit-button">Edit</button>
+<<<<<<< HEAD
           <button onClick={confirmDelete} className="delete-button">Delete Study Set</button>
+=======
+          <button onClick={() => setShowDeleteConfirmation(true)} className="delete-button">Delete Study Set</button>
+          <button onClick={() => navigate('/project-library')} className="return-button">Return to Library</button>
+          <button onClick={() => navigate(`/study-set/${studySetId}/generate-study-guide`)} className="generate-guide-button">Generate Study Guide</button>
+          <button onClick={() => navigate(`/study-set/${studySetId}/generate-quiz`)} className="generate-quiz-button">Generate Quiz</button>
+>>>>>>> alpha1.0
         </div>
       )}
 
       {/* Delete confirmation modal */}
       {showDeleteConfirmation && (
+<<<<<<< HEAD
         <div className="delete-confirmation">
           <p>Are you sure you want to delete this study set?</p>
           <button onClick={() => handleDeleteConfirmation(true)} className="confirm-delete">Yes</button>
@@ -216,6 +324,12 @@ const StudySetPage = () => {
           <button onClick={() => navigate('/project-library')} className="return-to-library-button">
             Return to Study Set Library
           </button>
+=======
+        <div className="delete-confirmation-modal">
+          <p>Are you sure you want to delete this study set?</p>
+          <button onClick={handleDeleteStudySet} className="confirm-delete-button">Yes, Delete</button>
+          <button onClick={() => setShowDeleteConfirmation(false)} className="cancel-delete-button">Cancel</button>
+>>>>>>> alpha1.0
         </div>
       )}
     </div>
