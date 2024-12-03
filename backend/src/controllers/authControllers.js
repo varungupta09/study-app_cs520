@@ -1,5 +1,8 @@
 const bcrypt = require('bcrypt');
 const db = require('../database');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your-jwt-secret-key';
 
 // Helper function to validate email format
 const isValidEmail = (email) => {
@@ -70,11 +73,14 @@ const login = (req, res) => {
       return res.status(401).send('Invalid credentials.');
     }
 
+    // Generate a JWT token
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+
     res.status(200).send({
       message: 'Login successful!',
       userId: user.id,
       username: user.username,
-      token: 'some_jwt_token', // Optional JWT or similar token
+      token
     });
   });
 };
