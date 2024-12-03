@@ -1,0 +1,273 @@
+/* StudySetPage.css */
+
+/* General Styles */
+.study-set-page {
+  font-family: 'Roboto', Arial, sans-serif; /* Use a more modern font */
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: #f4f7fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.5em;
+  margin-top: 20px;
+  font-weight: 500;
+}
+
+/* Input and Textarea Styles */
+input, textarea {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1.1em;
+  background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical; /* Allow vertical resizing */
+}
+
+/* Focus State */
+input:focus, textarea:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.3); /* Green glow */
+  outline: none;
+}
+
+/* Button Styles */
+button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1em;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+button:hover:enabled {
+  transform: translateY(-2px); /* Lift effect on hover */
+}
+
+button:focus {
+  outline: none;
+}
+
+/* Edit Mode Styles */
+.input-field {
+  font-size: 1.2em;
+}
+
+/* Custom File Upload */
+.custom-file-upload {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1em;
+  transition: background-color 0.3s ease;
+}
+
+.custom-file-upload:hover {
+  background-color: #45a049;
+}
+
+.file-upload input[type="file"] {
+  display: none;
+}
+
+.file-upload {
+  margin-bottom: 20px;
+}
+
+.confirm-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.confirm-button:hover {
+  background-color: #45a049;
+}
+
+.cancel-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #e53935;
+}
+
+/* File List */
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+ul li {
+  margin-bottom: 10px;
+}
+
+ul li a {
+  color: #4CAF50;
+  text-decoration: none;
+  font-size: 1.1em;
+}
+
+ul li a:hover {
+  text-decoration: underline;
+  color: #45a049;
+}
+
+/* Buttons */
+.edit-button {
+  background-color: #ffa500;
+  color: white;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-button:hover, .edit-button:hover {
+  opacity: 0.8;
+  transform: translateY(-2px); /* Lift effect on hover */
+}
+
+/* Return to Library Button */
+.return-button {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.return-to-library-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-size: 1.1em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.return-to-library-button:hover {
+  background-color: #45a049;
+}
+
+/* Modal Styles (Optional for Confirm Deletion) */
+.confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  text-align: center;
+}
+
+.modal-content button {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.delete-confirmation {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  text-align: center;
+}
+
+.delete-confirmation button {
+  margin: 10px;
+}
+
+.confirm-delete {
+  background-color: red;
+  color: white;
+}
+
+.cancel-delete {
+  background-color: #ccc;
+}
+
+@media (max-width: 768px) {
+  /* For mobile devices */
+  .study-set-page {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h3 {
+    font-size: 1.2em;
+  }
+
+  input, textarea {
+    font-size: 1em;
+  }
+
+  button {
+    font-size: 1em;
+  }
+
+  .custom-file-upload {
+    font-size: 1em;
+  }
+
+  .confirm-button, .cancel-button {
+    font-size: 1.1em;
+  }
+
+  .edit-button, .delete-button {
+    font-size: 1em;
+  }
+
+  .return-to-library-button {
+    font-size: 1.1em;
+  }
+}
+
+.file-marked-delete span {
+  text-decoration: line-through;
+  color: red; /* Optional: make it visually distinct */
+}
