@@ -1,9 +1,11 @@
 const bcrypt = require('bcrypt');
 const db = require('../database');
 const jwt = require('jsonwebtoken');
+const env = require("dotenv").config();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-jwt-secret-key';
 
+console.log(JWT_SECRET)
 // Helper function to validate email format
 const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email regex
