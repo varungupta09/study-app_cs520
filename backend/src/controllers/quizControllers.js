@@ -1,7 +1,7 @@
 const db = require('../database');
 
 // Save a quiz score
-exports.saveQuizScore = (req, res) => {
+const saveQuizScore = (req, res) => {
   const { userId, quizId, score } = req.body;
 
   if (!userId || !quizId || typeof score === 'undefined') {
