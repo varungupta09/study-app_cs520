@@ -6,8 +6,8 @@ const NewProjectPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // handle form submission logic
     console.log("Project Created:", projectName);
+    setProjectName(""); // Clear input after submission
   };
 
   return (
@@ -18,12 +18,14 @@ const NewProjectPage = () => {
           <input
             type="text"
             id="project-name"
-            placeholder="Enter project name"
+            placeholder="Enter a descriptive project name"
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
             required
           />
-          <button type="submit">Create Project</button>
+          <button type="submit" disabled={!projectName.trim()}>
+            Create Project
+          </button>
         </form>
       </div>
     </div>
