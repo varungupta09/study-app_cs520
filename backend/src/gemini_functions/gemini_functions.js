@@ -2,9 +2,9 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { GoogleAIFileManager } = require("@google/generative-ai/server");
 
 // Initialize GoogleGenerativeAI with your API_KEY.
-const genAI = new GoogleGenerativeAI("AIzaSyCV5yYexFeOk_RKnkk-ydV-QJTf_CCU_ng");
+const genAI = new GoogleGenerativeAI("AIzaSyBO7Jemx6L-szY2IL-LoCQA5Dyh2ZDV21I");
 // Initialize GoogleAIFileManager with your API_KEY.
-const fileManager = new GoogleAIFileManager("AIzaSyCV5yYexFeOk_RKnkk-ydV-QJTf_CCU_ng");
+const fileManager = new GoogleAIFileManager("AIzaSyBO7Jemx6L-szY2IL-LoCQA5Dyh2ZDV21I");
 
 /**
  * Function to create a study guide from an array of PDF file paths.
