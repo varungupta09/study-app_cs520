@@ -62,6 +62,7 @@ const SignupPage = () => {
   };
 
   return (
+    <div className='SignupPage'>
     <div className="signup-container">
       <h2>Create an Account</h2>
       {error && <p className="error-message">{error}</p>}
@@ -97,6 +98,7 @@ const SignupPage = () => {
       <p>
         Already have an account? <Link to="/login">Log in</Link>
       </p>
+    </div>
     </div>
   );
 };
