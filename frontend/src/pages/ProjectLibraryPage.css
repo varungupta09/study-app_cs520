@@ -2,7 +2,7 @@
 .project-library-container {
   text-align: center;
   padding: 40px;
-  background-color: #f7f9fc;
+  background: linear-gradient(to bottom, #c9f7f7, #812fec);
 }
 
 .project-library-container h2 {
