@@ -8,6 +8,7 @@ const projectRoutes = require('./routes/projectRoutes');
 const authRoutes = require('./routes/authRoutes');
 const studyRoutes = require('./routes/studyRoutes');
 const shareRoutes = require('./routes/shareRoutes');
+const quizRoutes = require('./routes/quizRoutes');
 
 app.use(cors());
 
@@ -29,6 +30,9 @@ app.use('/api', studyRoutes);
 
 // Use share routes
 app.use('/api/share', shareRoutes);
+
+//Use quiz routes
+app.use('/api/quizzes', quizRoutes);
 
 // Serve static files from the frontend build (this should be after the routes)
 app.use(express.static(path.join(__dirname, '../../frontend/build')));

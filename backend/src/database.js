@@ -136,4 +136,23 @@ db.run(`
   }
 });
 
+db.run(`
+  CREATE TABLE IF NOT EXISTS quiz_scores (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    quiz_id INTEGER NOT NULL,
+    score INTEGER NOT NULL,
+    taken_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id),
+    UNIQUE (user_id, quiz_id, taken_date)
+  )
+`, (err) => {
+  if (err) {
+    console.error('Error creating quiz_scores table:', err);
+  } else {
+    console.log('Quiz scores table ready.');
+  }
+});
+
 module.exports = db;
