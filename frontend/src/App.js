@@ -12,6 +12,7 @@ import NavBar from './components/NavBar';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import LandingPage from './pages/LandingPage';
+import GenerateStudyPlanPage from './pages/GenerateStudyPlanPage';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -60,6 +61,7 @@ function App() {
             <Route path="/study-sets/:studySetId" element={<StudySetPage />} />
             <Route path="/study-set/:studySetId/generate-study-guide" element={<StudyGuidePage />} />
             <Route path="/study-set/:studySetId/generate-quiz" element={<CreateQuizPage />} />
+            <Route path="/study-set/:studySetId/generate-study-plan" element={<GenerateStudyPlanPage />} />
             <Route path="/quiz/:quizId" element={<QuizPage />} />
             {/* Redirect to HomePage if authenticated */}
             <Route path="*" element={<Navigate to="/home-page" />} />

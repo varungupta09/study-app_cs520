@@ -58,5 +58,9 @@ router.post('/study-set/:id/quizzes', studyController.createQuiz);
 // Route to delete a quiz for a specific study set
 router.delete('/study-set/:id/quizzes/:quizId', studyController.deleteQuiz);
 
+// Route to create a study plan
+router.post('/study-set/:id/study-plan', studyController.createStudyPlan);
+router.get('/study-set/:id/study-plans', studyController.getStudyPlansForStudySet);
+router.delete('/study-set/:id/study-plans/:planId', studyController.deleteStudyPlan);
 
 module.exports = router;

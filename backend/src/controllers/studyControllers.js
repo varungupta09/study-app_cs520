@@ -516,6 +516,83 @@ const deleteQuiz = (req, res) => {
   });
 };
 
+// Controller to create a new study plan
+const createStudyPlan = (req, res) => {
+  const { id: studySetId } = req.params;
+  const { days } = req.body;
+
+  // Step 1: Fetch all files for the given study set from the database
+  db.all('SELECT file_path FROM study_set_files WHERE study_set_id = ?', [studySetId], (err, rows) => {
+    if (err) {
+      console.error('Error fetching files:', err);
+      return res.status(500).json({ error: 'Error fetching files.' });
+    }
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'No files found for the given study set.' });
+    }
+
+    // Step 2: Extract the file paths from the result
+    const filePaths = rows.map(row => row.file_path);
+
+    // Step 3: Pass the file paths and days to the gemini.createStudyPlan function
+    gemini.createStudyPlan(filePaths, days)
+      .then(planContent => {
+        // Step 4: Save the study plan to the database
+        db.run(
+          'INSERT INTO study_plans (study_set_id, plan_content) VALUES (?, ?)',
+          [studySetId, planContent],
+          function (err) {
+            if (err) {
+              console.error('Error saving study plan:', err);
+              return res.status(500).json({ error: 'Error saving study plan.' });
+            }
+
+            console.log('Study plan saved successfully.');
+            res.status(201).json({
+              message: 'Study plan created successfully.',
+              study_set_id: studySetId,
+              plan_content: planContent
+            });
+          }
+        );
+      })
+      .catch((error) => {
+        console.error('Error creating study plan:', error);
+        res.status(500).json({ error: 'Error creating study plan.' });
+      });
+  });
+};
+
+// Controller to fetch study plans for a specific study set
+const getStudyPlansForStudySet = (req, res) => {
+  const { id: studySetId } = req.params;
+
+  db.all('SELECT * FROM study_plans WHERE study_set_id = ?', [studySetId], (err, rows) => {
+    if (err) {
+      console.error('Error fetching study plans:', err);
+      return res.status(500).json({ error: 'Error fetching study plans.' });
+    }
+    res.json(rows);
+  });
+};
+
+// Controller to delete a study plan
+const deleteStudyPlan = (req, res) => {
+  const { id: studySetId, planId } = req.params;
+
+  db.run('DELETE FROM study_plans WHERE id = ? AND study_set_id = ?', [planId, studySetId], function (err) {
+    if (err) {
+      console.error('Error deleting study plan:', err);
+      return res.status(500).json({ error: 'Error deleting study plan.' });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: 'Study plan not found.' });
+    }
+    res.json({ message: 'Study plan deleted successfully.' });
+  });
+};
+
 module.exports = {
   createStudySet,
   getAllStudySets,
@@ -531,4 +608,7 @@ module.exports = {
   getQuizForStudySet,
   createQuiz,
   deleteQuiz,
+  createStudyPlan,
+  getStudyPlansForStudySet,
+  deleteStudyPlan,
 };

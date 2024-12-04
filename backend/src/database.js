@@ -96,6 +96,24 @@ db.serialize(() => {
       console.log('Quizzes table ready.');
     }
   });
+
+  // Create `study_plans` table to store study plans in JSON format
+  db.run(`
+    CREATE TABLE IF NOT EXISTS study_plans (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      study_set_id INTEGER NOT NULL,
+      plan_content TEXT NOT NULL,
+      creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+      modification_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (study_set_id) REFERENCES study_sets(id)
+    )
+  `, (err) => {
+    if (err) {
+      console.error('Error creating study_plans table:', err);
+    } else {
+      console.log('Study plans table ready.');
+    }
+  });
 });
 
 module.exports = db;

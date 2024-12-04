@@ -220,6 +220,7 @@ const StudySetPage = () => {
           <button onClick={() => navigate('/project-library')} className="return-button">Return to Library</button>
           <button onClick={() => navigate(`/study-set/${studySetId}/generate-study-guide`)} className="generate-guide-button">Generate Study Guide</button>
           <button onClick={() => navigate(`/study-set/${studySetId}/generate-quiz`)} className="generate-quiz-button">Generate Quiz</button>
+          <button onClick={() => navigate(`/study-set/${studySetId}/generate-study-plan`)} className="generate-plan-button">Generate Study Plan</button>
         </div>
       )}
 
