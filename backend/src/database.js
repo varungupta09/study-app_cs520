@@ -116,4 +116,24 @@ db.serialize(() => {
   });
 });
 
+db.run(`
+  CREATE TABLE IF NOT EXISTS study_set_shares (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    study_set_id INTEGER NOT NULL,
+    shared_with_user_id INTEGER NOT NULL,
+    shared_by_user_id INTEGER NOT NULL,
+    share_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (study_set_id) REFERENCES study_sets(id),
+    FOREIGN KEY (shared_with_user_id) REFERENCES users(id),
+    FOREIGN KEY (shared_by_user_id) REFERENCES users(id),
+    UNIQUE (study_set_id, shared_with_user_id)
+  )
+`, (err) => {
+  if (err) {
+    console.error('Error creating study_set_shares table:', err);
+  } else {
+    console.log('Study set shares table ready.');
+  }
+});
+
 module.exports = db;
