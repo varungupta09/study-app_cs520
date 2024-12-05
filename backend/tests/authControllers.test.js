@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('../src/server');
+const db = require('../src/database');
 
 let server;
 let uniqueUsername;
@@ -52,5 +53,51 @@ describe('Auth Controllers', () => {
       .send({ username: 'wronguser@example.com', password: 'wrongpassword' });
     expect(response.status).toBe(401);
     expect(response.text).toBe('Invalid credentials.');
+  });
+
+  it('should return 400 for invalid email format during signup', async () => {
+    const response = await request(app)
+      .post('/auth/signup')
+      .send({ username: 'invalidemail.com', password: 'password123' });
+    expect(response.status).toBe(400);
+    expect(response.text).toBe('Invalid email format.');
+  });
+
+  it('should return 400 if username is missing during signup', async () => {
+    const response = await request(app)
+      .post('/auth/signup')
+      .send({ password: 'password123' });
+    expect(response.status).toBe(400);
+    expect(response.text).toBe('Email and password are required.');
+  });
+
+  it('should return 400 if username is missing during login', async () => {
+    const response = await request(app)
+      .post('/auth/login')
+      .send({ password: 'password123' });
+    expect(response.status).toBe(400);
+    expect(response.text).toBe('Email and password are required.');
+  });
+
+  it('should return 400 if password is missing during login', async () => {
+    const response = await request(app)
+      .post('/auth/login')
+      .send({ username: uniqueUsername });
+    expect(response.status).toBe(400);
+    expect(response.text).toBe('Email and password are required.');
+  });
+
+  it('should return a valid JWT token on login', async () => {
+    await request(app)
+      .post('/auth/signup')
+      .send({ username: uniqueUsername, password: 'password123' });
+  
+    const response = await request(app)
+      .post('/auth/login')
+      .send({ username: uniqueUsername, password: 'password123' });
+  
+    expect(response.status).toBe(200);
+    expect(response.body.token).toBeDefined();
+    expect(response.body.token).toMatch(/^eyJ/); // JWT token should start with "eyJ"
   });
 });
