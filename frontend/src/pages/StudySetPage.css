@@ -11,21 +11,67 @@
 }
 
 .study-set-page {
-  max-width: 600px;
-  height: 550px;
+  font-family: 'Roboto', Arial, sans-serif;
   padding: 40px;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 60%;
+  width: 500px;
+  height: 500px;
 }
 
 h1 {
-  font-size: 2rem;
+  padding-top: 40px;
+  font-size: 2.5rem;
   color: #333;
   margin-bottom: 20px;
+  text-align: center;
+  /* Centering the h1 */
 }
 
+/* Header Actions (Icons and Title) */
+.header-actions {
+  display: flex;
+  justify-content: center;
+  /* Centers the title and icons horizontally */
+  align-items: center;
+  /* Aligns the title and icons vertically */
+  gap: 10px;
+  /* Adds space between title and icons */
+}
+
+.icon-buttons {
+  display: flex;
+  gap: 10px;
+  padding-top: 30px;
+  /* Space between the icons */
+}
+
+.edit-icon,
+.delete-icon {
+  font-size: 1.2rem;
+  /* Smaller and sleeker icons */
+  cursor: pointer;
+  /* Adds pointer cursor on hover */
+  color: #007bff;
+  /* Default color for icons */
+  transition: color 0.3s;
+  /* Adds smooth color change on hover */
+  padding-top: 20px;
+  /* Push the icons down from the top */
+}
+
+.edit-icon:hover {
+  color: #28a745;
+  /* Green color on hover for edit icon */
+}
+
+.delete-icon:hover {
+  color: #dc3545;
+  /* Red color on hover for delete icon */
+}
+
+/* Other Text Styles */
 h3 {
   font-size: 1.25rem;
   color: #555;
@@ -35,6 +81,7 @@ p {
   color: #666;
 }
 
+/* Input and Textarea Styles */
 input,
 textarea {
   width: 100%;
@@ -51,6 +98,7 @@ textarea:focus {
   border-color: #007BFF;
 }
 
+/* File Input Styles */
 .file-input {
   padding: 5px 0;
 }
@@ -76,118 +124,31 @@ textarea:focus {
   color: red;
 }
 
-button {
-  padding: 10px 20px;
-  margin: 5px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-
-button:focus {
-  outline: none;
-}
-
-/* Header and Icons */
-.header-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.icon-buttons {
-  display: flex;
-  gap: 10px;
-  /* Space between the icons */
-}
-
-.edit-icon,
-.delete-icon {
-  font-size: 2rem;
-  /* Adjust the size */
-  cursor: pointer;
-  color: #007bff;
-}
-
-.edit-icon:hover {
-  color: #28a745;
-}
-
-.delete-icon:hover {
-  color: #dc3545;
-}
-
-/* Back Link Icon */
-.back-link {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  cursor: pointer;
-}
-
-.back-link-icon {
-  font-size: 2rem;
-  color: #007bff;
-}
-
-.study-set-container {
-  position: relative;
-}
-
-.study-set-page {
-  padding: 20px;
-  margin: 0 auto;
-  max-width: 900px;
-  position: relative;
-}
-
-h1 {
-  font-size: 2rem;
-  color: #333;
-  margin-top: 40px;
-}
-
-h3 {
-  font-size: 1.25rem;
-  color: #555;
-}
-
-p {
-  color: #666;
-}
-
-.input-field {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
-
+/* Uniform Button Styles */
 button {
   display: inline-block;
   margin: 20px auto;
-  padding: 20px 30px;
-  /* Compact padding */
+  padding: 12px 20px;
   background-color: #007bff;
-  /* Solid color for simplicity */
   color: white;
   font-size: 14px;
   font-weight: 600;
   border: none;
-  border-radius: 10px;
-  /* Subtle rounded edges */
+  border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   text-align: center;
+  width: 100%;
+  /* Ensure buttons take full width */
+  height: 50px;
+  /* Set a fixed height */
+  min-width: 200px;
+  /* Minimum width to prevent overly small buttons */
+  word-wrap: break-word;
+  /* Allow text to wrap */
+  box-sizing: border-box;
   max-width: fit-content;
-  /* Prevents the button from stretching */
+  /* Ensure padding doesn't affect width/height */
 }
 
 button:hover {
@@ -198,6 +159,7 @@ button:focus {
   outline: none;
 }
 
+/* Specific Button Variants */
 .confirm-button {
   background-color: #28a745;
   color: white;
@@ -233,15 +195,13 @@ button:focus {
   color: white;
 }
 
-.file-input {
-  padding: 5px 0;
-}
-
+/* New Files Preview */
 .new-files-preview ul {
   padding: 0;
   list-style: none;
 }
 
+/* Delete Confirmation Modal */
 .delete-confirmation-modal {
   background-color: rgba(0, 0, 0, 0.6);
   position: fixed;
@@ -263,17 +223,38 @@ button:focus {
   width: 300px;
 }
 
+/* Button Group */
 .button-group {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
 }
 
+/* File Upload */
 .file-upload {
   margin-bottom: 20px;
 }
 
-.new-files-preview ul {
-  padding: 0;
-  list-style: none;
+/* Back Link Icon */
+.back-link {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}
+
+.back-link-icon {
+  font-size: 2rem;
+  color: #007bff;
+}
+
+.study-set-container {
+  position: relative;
+}
+
+.study-set-page {
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 900px;
+  position: relative;
 }
