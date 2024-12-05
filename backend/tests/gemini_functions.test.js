@@ -10,7 +10,7 @@ describe('Gemini Functions', () => {
     const result = await createStudyGuide(filePaths);
     expect(typeof result).toBe('string');
     expect(result.length).toBeGreaterThan(0);
-  }, 15000); // Increase timeout to 15 seconds
+  }, 20000); // Increase timeout to 20 seconds
 
   it('should create a quiz', async () => {
     const filePaths = [
@@ -20,7 +20,7 @@ describe('Gemini Functions', () => {
     const result = await createQuiz(filePaths, 5);
     expect(typeof result).toBe('string');
     expect(result.length).toBeGreaterThan(0);
-  }, 15000); // Increase timeout to 15 seconds
+  }, 20000); // Increase timeout to 20 seconds
 
   it('should create a study plan', async () => {
     const filePaths = [
@@ -30,5 +30,5 @@ describe('Gemini Functions', () => {
     const result = await createStudyPlan(filePaths, 7);
     expect(typeof result).toBe('string');
     expect(result.length).toBeGreaterThan(0);
-  }, 15000); // Increase timeout to 15 seconds
+  }, 20000); // Increase timeout to 20 seconds
 });
