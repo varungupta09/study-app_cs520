@@ -22,8 +22,6 @@ const fetchOwnStudySetsFromAPI = async (userId, setOwnStudySets) => {
 const fetchSharedStudySetsFromAPI = async (userId, setSharedStudySets) => {
   try {
     const response = await fetch(`http://localhost:5001/api/share/shared-with-me/${userId}`);
-    console.log("hi")
-    console.log(response)
     if (response.ok) {
       const data = await response.json();
       setSharedStudySets(data);
@@ -139,35 +137,43 @@ const StudySetsPage = () => {
             <>
               <div className="your-study-sets">
                 <h2>Your Study Sets</h2>
-                <ul>
-                  {ownStudySets.map((studySet) => (
-                    <li
-                      key={studySet.id || studySet.name}
-                      className="study-set-item"
-                      onClick={() => handleStudySetClick(studySet.id)}
-                    >
-                      <h3>{studySet.name}</h3>
-                      <p>{studySet.description || 'No description available'}</p>
-                    </li>
-                  ))}
-                </ul>
+                {ownStudySets.length === 0 ? (
+                  <p>No study sets available.</p> // Add this line for the "empty" case
+                ) : (
+                  <ul>
+                    {ownStudySets.map((studySet) => (
+                      <li
+                        key={studySet.id || studySet.name}
+                        className="study-set-item"
+                        onClick={() => handleStudySetClick(studySet.id)}
+                      >
+                        <h3>{studySet.name}</h3>
+                        <p>{studySet.description === "null" ? 'No description available' : studySet.description}</p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
               <div className="shared-study-sets">
                 <h2>Shared Study Sets</h2>
-                <ul>
-                  {sharedStudySets.map((studySet) => (
-                    <li
-                      key={studySet.id || studySet.name}
-                      className="study-set-item"
-                      onClick={() => handleStudySetClick(studySet.id)}
-                    >
-                      <h3>{studySet.name}</h3>
-                      <p>{studySet.description || 'No description available'}</p>
-                      <p>Shared by: {studySet.shared_by}</p>
-                    </li>
-                  ))}
-                </ul>
+                {sharedStudySets.length === 0 ? (
+                  <p>No shared study sets available.</p> // Add this line for the "empty" case
+                ) : (
+                  <ul>
+                    {sharedStudySets.map((studySet) => (
+                      <li
+                        key={studySet.id || studySet.name}
+                        className="study-set-item"
+                        onClick={() => handleStudySetClick(studySet.id)}
+                      >
+                        <h3>{studySet.name}</h3>
+                        <p>{studySet.description === "null" ? 'No description available' : studySet.description}</p>
+                        <p>Shared by: {studySet.shared_by}</p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </>
           )}
@@ -213,20 +219,15 @@ const StudySetsPage = () => {
                     </ul>
                   </div>
                 )}
-                <p className="file-types-info">
-                  Accepted file types: .pdf
-                </p>
+                <p className="file-types-info">Accepted file types: .pdf</p>
               </div>
 
               <div className="modal-actions">
+                <button onClick={handleCreateStudySet} className="confirm-button">
+                  Create
+                </button>
                 <button onClick={toggleModal} className="cancel-button">
                   Cancel
-                </button>
-                <button
-                  onClick={handleCreateStudySet}
-                  className="confirm-button"
-                >
-                  Create
                 </button>
               </div>
             </div>
