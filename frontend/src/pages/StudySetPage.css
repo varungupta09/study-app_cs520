@@ -331,3 +331,7 @@ button:focus {
 .cancel-button {
   background-color: #ccc;
 }
+
+.chat-component {
+  margin-top: 50px;
+}

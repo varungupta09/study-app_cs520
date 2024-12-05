@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { GrFormPreviousLink } from "react-icons/gr"; // Import the back link icon
 import { MdEdit, MdDelete } from "react-icons/md"; // Import the edit and delete icons
 import { AiOutlineShareAlt } from "react-icons/ai"; // Import share icon
+import ChatComponent from "../components/Chat.js"; // Import Chat Component
 import "./StudySetPage.css";
 
 const StudySetPage = () => {
@@ -346,6 +347,9 @@ const StudySetPage = () => {
             </div>
           </div>
         )}
+
+        {/* Chat Component */}
+        <ChatComponent studySetId={studySetId} userId={userId} />
 
         {showDeleteConfirmation && (
           <div className="delete-confirmation-modal">
