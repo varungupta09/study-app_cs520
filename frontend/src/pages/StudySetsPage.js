@@ -153,7 +153,7 @@ const StudySetsPage = () => {
                   onChange={handleFileChange}
                   multiple
                   className="input-field file-input"
-                  accept=".txt,.doc,.docx,.ppt,.pptx,.pdf"
+                  accept=".pdf"
                 />
                 {files.length > 0 && (
                   <div className="file-list">
@@ -166,7 +166,7 @@ const StudySetsPage = () => {
                   </div>
                 )}
                 <p className="file-types-info">
-                  Accepted file types: .txt, .doc, .docx, .ppt, .pptx
+                  Accepted file types: .pdf
                 </p>
               </div>
 
