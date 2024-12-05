@@ -306,7 +306,7 @@ const StudySetPage = () => {
           </div>
         ) : (
           <div className="view-mode">
-            <p>{studySet.description || "No description available"}</p>
+            <p>{studySet.description === "null" ? 'No description available' : studySet.description}</p>
             <h3>Files</h3>
             <ul>
               {studySet.files.length > 0 ? (
@@ -353,20 +353,22 @@ const StudySetPage = () => {
 
         {showDeleteConfirmation && (
           <div className="delete-confirmation-modal">
-            <p>Are you sure you want to delete this study set?</p>
-            <div className="button-group">
-              <button
-                onClick={handleDeleteStudySet}
-                className="confirm-delete-button"
-              >
-                Yes, Delete
-              </button>
-              <button
-                onClick={() => setShowDeleteConfirmation(false)}
-                className="cancel-delete-button"
-              >
-                Cancel
-              </button>
+            <div className="modal-content">
+              <p>Are you sure you want to delete this study set?</p>
+              <div className="button-group">
+                <button
+                  onClick={handleDeleteStudySet}
+                  className="confirm-delete-button"
+                >
+                  Yes, Delete
+                </button>
+                <button
+                  onClick={() => setShowDeleteConfirmation(false)}
+                  className="cancel-delete-button"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         )}

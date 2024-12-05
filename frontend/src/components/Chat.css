@@ -1,20 +1,3 @@
-/* Chat container */
-.chat-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background-color: #f9f9f9;
-  height: 500px;
-  overflow: hidden;
-}
-
 /* Message list container */
 .messages {
   flex-grow: 1;
@@ -24,6 +7,10 @@
   margin-bottom: 15px;
   display: flex;
   flex-direction: column; /* Ensure messages are stacked vertically */
+}
+
+.chat-header{
+  padding-bottom: 20px;
 }
 
 /* Individual message */

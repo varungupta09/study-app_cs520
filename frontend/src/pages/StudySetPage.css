@@ -2,12 +2,14 @@
 .study-set-container {
   font-family: Arial, sans-serif;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   background: linear-gradient(to bottom, #e0f7fa, #a29bfe);
   min-height: 100vh;
   margin: 0;
   padding: 0;
+  height: 1000px;
+  padding-top: 20px; /* Add space before the page */
 }
 
 .study-set-page {
@@ -17,7 +19,7 @@
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 500px;
-  height: 500px;
+  height: 900px;
 }
 
 h1 {
@@ -85,6 +87,7 @@ h1 {
 
 /* Other Text Styles */
 h3 {
+  padding-top: 20px;
   font-size: 1.25rem;
   color: #555;
 }
@@ -226,10 +229,26 @@ button:focus {
   align-items: center;
 }
 
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 .delete-confirmation-modal p {
   font-size: 1.2rem;
   margin-bottom: 20px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirm-delete-button,
+.cancel-delete-button {
+  align-items: center;
 }
 
 .confirm-delete-button {
