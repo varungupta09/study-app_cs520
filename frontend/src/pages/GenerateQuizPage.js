@@ -75,7 +75,7 @@ const GenerateQuizPage = () => {
   };
 
   const handleQuizClick = (quizId) => {
-    navigate(`/quiz/${quizId}`);
+    navigate(`/quiz/${studySetId}/${quizId}`);
   };
 
   if (loading) return <p>Loading quizzes...</p>;

@@ -120,3 +120,8 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.quiz-buttons {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+}

@@ -62,7 +62,7 @@ function App() {
             <Route path="/study-set/:studySetId/generate-study-guide" element={<StudyGuidePage />} />
             <Route path="/study-set/:studySetId/generate-quiz" element={<CreateQuizPage />} />
             <Route path="/study-set/:studySetId/generate-study-plan" element={<GenerateStudyPlanPage />} />
-            <Route path="/quiz/:quizId" element={<QuizPage />} />
+            <Route path="/quiz/:studySetId/:quizId" element={<QuizPage />} />
             {/* Redirect to HomePage if authenticated */}
             <Route path="*" element={<Navigate to="/home-page" />} />
           </>

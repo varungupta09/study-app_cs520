@@ -3,14 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './QuizPage.css';
 
 const QuizPage = () => {
-  const { quizId } = useParams();
+  const { studySetId, quizId } = useParams();
   const navigate = useNavigate();
-  const [quiz, setQuiz] = useState([]); // Initialize quiz as an empty array
+  const [quiz, setQuiz] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userAnswers, setUserAnswers] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [feedback, setFeedback] = useState([]);
+  const [score, setScore] = useState(0);  // Store score
 
   // Fetch quiz questions
   const fetchQuiz = async () => {
@@ -19,9 +20,7 @@ const QuizPage = () => {
       const response = await fetch(`http://localhost:5001/api/study-set/quiz/${quizId}`);
       if (!response.ok) throw new Error('Failed to fetch quiz details.');
       const data = await response.json();
-      console.log(data);
       const quiz_content = JSON.parse(data[0].quiz_content);
-      console.log(quiz_content);
       setQuiz(quiz_content);
     } catch (err) {
       setError(err.message);
@@ -35,6 +34,7 @@ const QuizPage = () => {
   }, [quizId]);
 
   const handleAnswerChange = (questionIndex, answerIndex) => {
+    if (submitted) return; // Prevent changes after submission
     const newUserAnswers = [...userAnswers];
     newUserAnswers[questionIndex] = answerIndex;
     setUserAnswers(newUserAnswers);
@@ -75,16 +75,20 @@ const QuizPage = () => {
     setSubmitted(true);
 
     // Calculate score
-    const score = newFeedback.filter(Boolean).length;
-    
+    const correctAnswers = newFeedback.filter(Boolean).length;
+    setScore(correctAnswers); // Update score state
+
     // Submit score to backend
-    handleScoreSubmission(score);
+    handleScoreSubmission(correctAnswers);
+  };
+
+  const handleGoHome = () => {
+    navigate(`/study-set/${studySetId}/generate-quiz`);
   };
 
   if (loading) return <p>Loading quiz...</p>;
   if (error) return <p className="error">{error}</p>;
 
-  // Check if quiz data exists before rendering questions
   if (!quiz || quiz.length === 0) return <p>No quiz questions available.</p>;
 
   return (
@@ -106,6 +110,7 @@ const QuizPage = () => {
                     value={answerIndex}
                     checked={userAnswers[index] === answerIndex}
                     onChange={() => handleAnswerChange(index, answerIndex)}
+                    disabled={submitted} // Disable inputs after submission
                   />
                   {answer}
                 </label>
@@ -124,9 +129,16 @@ const QuizPage = () => {
           </div>
         ))}
 
-        <button onClick={handleSubmit} className="submit-quiz-button">
-          Submit Quiz
-        </button>
+        {!submitted && (
+          <div className="quiz-buttons">
+            <button onClick={handleSubmit} className="submit-quiz-button">
+              Submit Quiz
+            </button>
+            <button onClick={handleGoHome} className="go-home-button">
+              Back to Quiz List
+            </button>
+          </div>
+        )}
 
         {submitted && (
           <div className="quiz-feedback">
@@ -141,6 +153,12 @@ const QuizPage = () => {
                 </p>
               </div>
             ))}
+
+            <h4>Your Score: {score}/{quiz.length}</h4> {/* Display score as a fraction */}
+
+            <button onClick={handleGoHome} className="go-home-button">
+              Back to Quiz List
+            </button>
           </div>
         )}
       </div>
