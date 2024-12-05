@@ -1,273 +1,279 @@
-/* StudySetPage.css */
-
 /* General Styles */
+.study-set-container {
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #e0f7fa, #a29bfe);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
 .study-set-page {
-  font-family: 'Roboto', Arial, sans-serif; /* Use a more modern font */
-  padding: 20px;
-  max-width: 900px;
-  margin: 0 auto;
-  background-color: #f4f7fa;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+  max-width: 600px;
+  height: 550px;
+  padding: 40px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 60%;
 }
 
 h1 {
-  font-size: 2.5em;
+  font-size: 2rem;
+  color: #333;
   margin-bottom: 20px;
-  font-weight: 600;
 }
 
 h3 {
-  font-size: 1.5em;
-  margin-top: 20px;
-  font-weight: 500;
+  font-size: 1.25rem;
+  color: #555;
 }
 
-/* Input and Textarea Styles */
-input, textarea {
-  width: 100%;
-  padding: 12px 15px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1.1em;
-  background-color: #fff;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+p {
+  color: #666;
 }
 
+input,
 textarea {
-  min-height: 120px;
-  resize: vertical; /* Allow vertical resizing */
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
-/* Focus State */
-input:focus, textarea:focus {
-  border-color: #4CAF50;
-  box-shadow: 0 0 8px rgba(76, 175, 80, 0.3); /* Green glow */
+input:focus,
+textarea:focus {
   outline: none;
+  border-color: #007BFF;
 }
 
-/* Button Styles */
+.file-input {
+  padding: 5px 0;
+}
+
+.current-files {
+  margin-bottom: 20px;
+}
+
+.current-files ul {
+  list-style: none;
+  padding: 0;
+}
+
+.current-files li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.file-marked-delete {
+  text-decoration: line-through;
+  color: red;
+}
+
 button {
-  padding: 12px 20px;
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 1rem;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 1.1em;
-  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-button:hover:enabled {
-  transform: translateY(-2px); /* Lift effect on hover */
+button:hover {
+  opacity: 0.8;
 }
 
 button:focus {
   outline: none;
 }
 
-/* Edit Mode Styles */
-.input-field {
-  font-size: 1.2em;
+/* Header and Icons */
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* Custom File Upload */
-.custom-file-upload {
-  background-color: #4CAF50;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 5px;
+.icon-buttons {
+  display: flex;
+  gap: 10px;
+  /* Space between the icons */
+}
+
+.edit-icon,
+.delete-icon {
+  font-size: 2rem;
+  /* Adjust the size */
   cursor: pointer;
-  font-size: 1.1em;
-  transition: background-color 0.3s ease;
+  color: #007bff;
 }
 
-.custom-file-upload:hover {
-  background-color: #45a049;
+.edit-icon:hover {
+  color: #28a745;
 }
 
-.file-upload input[type="file"] {
-  display: none;
+.delete-icon:hover {
+  color: #dc3545;
+}
+
+/* Back Link Icon */
+.back-link {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}
+
+.back-link-icon {
+  font-size: 2rem;
+  color: #007bff;
+}
+
+.study-set-container {
+  position: relative;
+}
+
+.study-set-page {
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 900px;
+  position: relative;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #333;
+  margin-top: 40px;
+}
+
+h3 {
+  font-size: 1.25rem;
+  color: #555;
+}
+
+p {
+  color: #666;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+button {
+  display: inline-block;
+  margin: 20px auto;
+  padding: 20px 30px;
+  /* Compact padding */
+  background-color: #007bff;
+  /* Solid color for simplicity */
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  /* Subtle rounded edges */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center;
+  max-width: fit-content;
+  /* Prevents the button from stretching */
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+button:focus {
+  outline: none;
+}
+
+.confirm-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.cancel-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.generate-guide-button {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.generate-quiz-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.generate-plan-button {
+  background-color: #6610f2;
+  color: white;
+}
+
+.confirm-delete-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.cancel-delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.file-input {
+  padding: 5px 0;
+}
+
+.new-files-preview ul {
+  padding: 0;
+  list-style: none;
+}
+
+.delete-confirmation-modal {
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.delete-confirmation-modal>div {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+  width: 300px;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .file-upload {
   margin-bottom: 20px;
 }
 
-.confirm-button {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.confirm-button:hover {
-  background-color: #45a049;
-}
-
-.cancel-button {
-  background-color: #f44336;
-  color: white;
-}
-
-.cancel-button:hover {
-  background-color: #e53935;
-}
-
-/* File List */
-ul {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-ul li {
-  margin-bottom: 10px;
-}
-
-ul li a {
-  color: #4CAF50;
-  text-decoration: none;
-  font-size: 1.1em;
-}
-
-ul li a:hover {
-  text-decoration: underline;
-  color: #45a049;
-}
-
-/* Buttons */
-.edit-button {
-  background-color: #ffa500;
-  color: white;
-}
-
-.delete-button {
-  background-color: #f44336;
-  color: white;
-}
-
-.delete-button:hover, .edit-button:hover {
-  opacity: 0.8;
-  transform: translateY(-2px); /* Lift effect on hover */
-}
-
-/* Return to Library Button */
-.return-button {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-start;
-}
-
-.return-to-library-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 5px;
-  font-size: 1.1em;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.return-to-library-button:hover {
-  background-color: #45a049;
-}
-
-/* Modal Styles (Optional for Confirm Deletion) */
-.confirm-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 400px;
-  text-align: center;
-}
-
-.modal-content button {
-  margin-top: 10px;
-  width: 100%;
-}
-
-.delete-confirmation {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 20px;
-  border: 1px solid #ccc;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  text-align: center;
-}
-
-.delete-confirmation button {
-  margin: 10px;
-}
-
-.confirm-delete {
-  background-color: red;
-  color: white;
-}
-
-.cancel-delete {
-  background-color: #ccc;
-}
-
-@media (max-width: 768px) {
-  /* For mobile devices */
-  .study-set-page {
-    padding: 15px;
-  }
-
-  h1 {
-    font-size: 2em;
-  }
-
-  h3 {
-    font-size: 1.2em;
-  }
-
-  input, textarea {
-    font-size: 1em;
-  }
-
-  button {
-    font-size: 1em;
-  }
-
-  .custom-file-upload {
-    font-size: 1em;
-  }
-
-  .confirm-button, .cancel-button {
-    font-size: 1.1em;
-  }
-
-  .edit-button, .delete-button {
-    font-size: 1em;
-  }
-
-  .return-to-library-button {
-    font-size: 1.1em;
-  }
-}
-
-.file-marked-delete span {
-  text-decoration: line-through;
-  color: red; /* Optional: make it visually distinct */
+.new-files-preview ul {
+  padding: 0;
+  list-style: none;
 }
