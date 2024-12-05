@@ -1,6 +1,16 @@
 const db = require('../database');
 
-// Share a study set
+/**
+ * Controller to share a study set.
+ * 
+ * 1. Extracts the studySetId, sharedWithUserId, and sharedByUserId from the request body.
+ * 2. Attempts to insert a record into the study_set_shares table.
+ * 3. Handles unique constraint errors by checking if the study set has already been shared with the user.
+ * 4. Sends a success or error response based on the outcome of the operation.
+ * 
+ * @param {object} req - Express request object containing studySetId, sharedWithUserId, and sharedByUserId in the body.
+ * @param {object} res - Express response object used to send the success/error response.
+ */
 const shareStudySet = (req, res) => {
   const { studySetId, sharedWithUserId, sharedByUserId } = req.body;
 
@@ -22,7 +32,16 @@ const shareStudySet = (req, res) => {
   });
 };
 
-// Fetch study sets shared with the user
+/**
+ * Controller to fetch study sets shared with a user.
+ * 
+ * 1. Extracts the userId from the request parameters.
+ * 2. Queries the database to fetch all study sets shared with the user.
+ * 3. Sends the study sets or an error response if the query fails.
+ * 
+ * @param {object} req - Express request object containing the userId in the parameters.
+ * @param {object} res - Express response object used to send the study sets or an error response.
+ */
 const getSharedStudySets = (req, res) => {
   const { userId } = req.params;
 
@@ -43,7 +62,16 @@ const getSharedStudySets = (req, res) => {
   });
 };
 
-// Revoke access to a study set
+/**
+ * Controller to revoke access to a study set.
+ * 
+ * 1. Extracts the studySetId and sharedWithUserId from the request body.
+ * 2. Executes a DELETE query to remove the share record from the study_set_shares table.
+ * 3. Sends a success or error response based on the outcome of the operation.
+ * 
+ * @param {object} req - Express request object containing studySetId and sharedWithUserId in the body.
+ * @param {object} res - Express response object used to send the success/error response.
+ */
 const revokeAccess = (req, res) => {
   const { studySetId, sharedWithUserId } = req.body;
 
@@ -61,6 +89,7 @@ const revokeAccess = (req, res) => {
   });
 };
 
+// Export the shareStudySet, getSharedStudySets, and revokeAccess functions for use in routes
 module.exports = {
   shareStudySet,
   getSharedStudySets,
