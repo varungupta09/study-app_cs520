@@ -48,7 +48,7 @@ async function createStudyGuide(filePaths) {
 
     // Generate the study guide using all uploaded files
     const result = await model.generateContent([
-      { text: "Create a detailed study guide for the provided documents." },
+      { text: "Create a detailed study guide for the provided documents. Just give the study guide, no unnecessary text." },
       ...fileParts,
     ]);
 
