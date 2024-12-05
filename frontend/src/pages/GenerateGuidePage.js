@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import './GenerateGuidePage.css';
 
 const GenerateGuidePage = () => {
@@ -102,7 +103,7 @@ const GenerateGuidePage = () => {
           <ul>
             {studyGuides.map((guide) => (
               <li key={guide.id} className="study-guide-item">
-                <span>{guide.guide_content}</span>
+                <ReactMarkdown>{guide.guide_content}</ReactMarkdown>
                 <button
                   onClick={() => confirmDelete(guide.id)}
                   className="delete-guide-button"

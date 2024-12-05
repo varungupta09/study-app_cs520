@@ -1,80 +1,132 @@
+/* GenerateGuidePage.css */
+
+/* General page styles */
 .generate-guide-page {
   font-family: Arial, sans-serif;
+  margin: 0 auto;
   padding: 20px;
+  max-width: 900px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+  color: #333;
+  font-weight: bold;
 }
 
 h1 {
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-top: 30px;
+  font-size: 1.5em;
+}
+
+button {
+  font-size: 1em;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  background-color: #ccc;
+}
+
+button:hover:not(:disabled) {
+  background-color: #007bff;
+  color: white;
+}
+
+.return-button {
+  background-color: #f0f0f0;
   color: #333;
+  margin-bottom: 20px;
 }
 
 .create-guide-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #4caf50;
+  background-color: #28a745;
   color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.create-guide-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.study-guides-list {
   margin-top: 20px;
 }
 
-.study-guide-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px 0;
+.delete-guide-button {
+  background-color: #dc3545;
+  color: white;
+  margin-top: 10px;
 }
 
-.delete-guide-button {
-  padding: 5px 10px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.study-guides-list ul {
+  padding-left: 20px;
+}
+
+.study-guide-item {
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.study-guide-item:hover {
+  background-color: #f1f1f1;
+}
+
+.study-guide-item p {
+  margin: 0;
+  font-size: 1em;
 }
 
 .confirmation-popup {
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 20px;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  z-index: 1000;
+  width: 300px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.confirmation-popup p {
+  font-size: 1.2em;
+  margin-bottom: 15px;
 }
 
 .confirm-delete-button,
 .cancel-delete-button {
-  margin: 10px 5px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  width: 45%;
+  margin: 5px 5%;
 }
 
 .confirm-delete-button {
-  background-color: #f44336;
-  color: white;
+  background-color: #dc3545;
 }
 
 .cancel-delete-button {
-  background-color: #ccc;
-  color: black;
+  background-color: #f0f0f0;
+  color: #333;
 }
 
 .error {
   color: red;
+  font-weight: bold;
+}
+
+.study-guides-list ul {
+  list-style-type: none; 
+  padding-left: 0; 
+}
+
+.study-guide-item {
+  padding-left: 0; 
 }
