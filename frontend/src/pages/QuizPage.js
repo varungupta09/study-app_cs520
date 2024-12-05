@@ -40,12 +40,45 @@ const QuizPage = () => {
     setUserAnswers(newUserAnswers);
   };
 
+  const handleScoreSubmission = async (score) => {
+    try {
+      const userId = 1; // Replace with dynamic userId if available
+      const response = await fetch('http://localhost:5001/api/quizzes/scores', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          quizId,
+          score,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit quiz score.');
+      }
+
+      const data = await response.json();
+      console.log('Score submitted successfully:', data);
+    } catch (err) {
+      console.error('Error submitting score:', err.message);
+    }
+  };
+
   const handleSubmit = () => {
     const newFeedback = quiz.map((question, index) => {
       return userAnswers[index] === question.correctAnswer;
     });
+
     setFeedback(newFeedback);
     setSubmitted(true);
+
+    // Calculate score
+    const score = newFeedback.filter(Boolean).length;
+    
+    // Submit score to backend
+    handleScoreSubmission(score);
   };
 
   if (loading) return <p>Loading quiz...</p>;
