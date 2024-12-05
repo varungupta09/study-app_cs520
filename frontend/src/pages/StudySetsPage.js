@@ -137,34 +137,38 @@ const StudySetsPage = () => {
             </p>
           ) : (
             <>
-              <h2>Your Study Sets</h2>
-              <ul>
-                {ownStudySets.map((studySet) => (
-                  <li
-                    key={studySet.id || studySet.name}
-                    className="study-set-item"
-                    onClick={() => handleStudySetClick(studySet.id)}
-                  >
-                    <h3>{studySet.name}</h3>
-                    <p>{studySet.description || 'No description available'}</p>
-                  </li>
-                ))}
-              </ul>
+              <div className="your-study-sets">
+                <h2>Your Study Sets</h2>
+                <ul>
+                  {ownStudySets.map((studySet) => (
+                    <li
+                      key={studySet.id || studySet.name}
+                      className="study-set-item"
+                      onClick={() => handleStudySetClick(studySet.id)}
+                    >
+                      <h3>{studySet.name}</h3>
+                      <p>{studySet.description || 'No description available'}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-              <h2>Shared Study Sets</h2>
-              <ul>
-                {sharedStudySets.map((studySet) => (
-                  <li
-                    key={studySet.id || studySet.name}
-                    className="study-set-item"
-                    onClick={() => handleStudySetClick(studySet.id)}
-                  >
-                    <h3>{studySet.name}</h3>
-                    <p>{studySet.description || 'No description available'}</p>
-                    <p>Shared by: {studySet.shared_by}</p>
-                  </li>
-                ))}
-              </ul>
+              <div className="shared-study-sets">
+                <h2>Shared Study Sets</h2>
+                <ul>
+                  {sharedStudySets.map((studySet) => (
+                    <li
+                      key={studySet.id || studySet.name}
+                      className="study-set-item"
+                      onClick={() => handleStudySetClick(studySet.id)}
+                    >
+                      <h3>{studySet.name}</h3>
+                      <p>{studySet.description || 'No description available'}</p>
+                      <p>Shared by: {studySet.shared_by}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </>
           )}
         </div>
