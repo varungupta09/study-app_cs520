@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import Leaderboard from '../components/Leaderboard';
 import './GenerateQuizPage.css';
 
 const GenerateQuizPage = () => {
@@ -17,7 +18,6 @@ const GenerateQuizPage = () => {
     try {
       setLoading(true);
       const response = await fetch(`http://localhost:5001/api/study-set/${studySetId}/quizzes`);
-      console.log(response)
       if (!response.ok) throw new Error('Failed to fetch quizzes.');
       const data = await response.json();
       setQuizzes(data);
@@ -43,7 +43,7 @@ const GenerateQuizPage = () => {
       const response = await fetch(`http://localhost:5001/api/study-set/${studySetId}/quizzes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: 'New Quiz', questions: [] })  // Example, customize as needed
+        body: JSON.stringify({ name: 'New Quiz', questions: [] }), // Example, customize as needed
       });
 
       if (!response.ok) throw new Error('Failed to create a quiz.');
@@ -101,18 +101,16 @@ const GenerateQuizPage = () => {
           <ul>
             {quizzes.map((quiz, index) => (
               <li key={quiz.id} className="quiz-item">
-                <span
-                  className="quiz-box"
-                  onClick={() => handleQuizClick(quiz.id)}
-                >
+                <div className="quiz-box" onClick={() => handleQuizClick(quiz.id)}>
                   Study Quiz {index + 1}
-                </span>
+                </div>
                 <button
                   onClick={() => confirmDelete(quiz.id)}
                   className="delete-quiz-button"
                 >
                   Delete
                 </button>
+                <Leaderboard quizId={quiz.id} /> {/* Add Leaderboard component */}
               </li>
             ))}
           </ul>

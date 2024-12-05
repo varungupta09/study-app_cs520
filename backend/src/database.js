@@ -219,7 +219,7 @@ db.run(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     quiz_id INTEGER NOT NULL,
-    score INTEGER NOT NULL,
+    score REAL NOT NULL,
     taken_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (quiz_id) REFERENCES quizzes(id),
