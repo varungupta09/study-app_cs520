@@ -107,12 +107,17 @@ app.use('/api/quizzes', quizRoutes);
   */
 app.use(express.static(path.join(__dirname, '../../frontend/build')));
 
+// Export the app for testing
+module.exports = app;
+
 // Start the server
 /**
  * Starts the Express server and listens on the specified port (default: 5001).
  * 
  * @param {function} callback - A callback function that runs once the server is successfully started.
  */
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
+}
