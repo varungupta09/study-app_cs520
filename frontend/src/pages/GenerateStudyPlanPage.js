@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import ReactMarkdown from 'react-markdown';
 import './GenerateStudyPlanPage.css';
 
 const GenerateStudyPlanPage = () => {
   const { studySetId } = useParams();
+  const navigate = useNavigate(); // Hook for navigation
   const [days, setDays] = useState('');
   const [studyPlan, setStudyPlan] = useState('');
   const [loading, setLoading] = useState(false);
@@ -64,6 +65,11 @@ const GenerateStudyPlanPage = () => {
     fetchStudyPlans();
   }, [studySetId]);
 
+  // New button click handler
+  const handleReturnToStudySet = () => {
+    navigate(`/study-sets/${studySetId}`); 
+  };
+
   return (
     <div className="generate-study-plan-page">
       <h1>Generate Study Plan</h1>
@@ -114,6 +120,11 @@ const GenerateStudyPlanPage = () => {
           </button>
         </div>
       )}
+
+      {/* Return to Study Set Button */}
+      <button onClick={handleReturnToStudySet} className="return-button">
+        Return to Study Set
+      </button>
     </div>
   );
 };

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './GenerateGuidePage.css';
 
 const GenerateGuidePage = () => {
   const { studySetId } = useParams();
+  const navigate = useNavigate(); // Use useNavigate hook for navigation
   const [studyGuides, setStudyGuides] = useState([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
@@ -70,12 +71,20 @@ const GenerateGuidePage = () => {
     }
   };
 
+  const handleReturnToStudySet = () => {
+    navigate(`/study-sets/${studySetId}`);
+  };
+
   if (loading) return <p>Loading study guides...</p>;
   if (error) return <p className="error">{error}</p>;
 
   return (
     <div className="generate-guide-page">
       <h1>Study Guides for Study Set {studySetId}</h1>
+
+      <button onClick={handleReturnToStudySet} className="return-button">
+        Return to Study Set
+      </button>
 
       {studyGuides.length === 0 && <p>No study guides created yet.</p>}
 

@@ -5,7 +5,7 @@ import './GenerateQuizPage.css';
 
 const GenerateQuizPage = () => {
   const { studySetId } = useParams();
-  const navigate = useNavigate();
+  const navigate = useNavigate();  // Initialize navigate hook
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
@@ -78,6 +78,11 @@ const GenerateQuizPage = () => {
     navigate(`/quiz/${studySetId}/${quizId}`);
   };
 
+  // Navigate to the study set page when clicking the "Return to Study Set" button
+  const handleReturnToStudySet = () => {
+    navigate(`/study-sets/${studySetId}`);
+  };
+
   if (loading) return <p>Loading quizzes...</p>;
   if (error) return <p className="error">{error}</p>;
 
@@ -93,6 +98,14 @@ const GenerateQuizPage = () => {
         className="create-quiz-button"
       >
         {creating ? 'Waiting for quiz creation...' : 'Create Quiz'}
+      </button>
+
+      {/* Return to Study Set Button */}
+      <button
+        onClick={handleReturnToStudySet}
+        className="return-to-study-set-button"
+      >
+        Return to Study Set
       </button>
 
       {quizzes.length > 0 && (
