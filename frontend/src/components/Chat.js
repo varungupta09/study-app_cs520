@@ -75,6 +75,11 @@ const Chat = ({ studySetId, userId }) => {
 
   return (
     <div className="chat-container">
+      {/* Add header with "Study Set Chat" */}
+      <header className="chat-header">
+        <h1>Study Set Chat</h1>
+      </header>
+      
       <div className="messages">
         {loading ? (
           <p>Loading messages...</p>

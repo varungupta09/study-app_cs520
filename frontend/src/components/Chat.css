@@ -22,6 +22,8 @@
   overflow-y: auto;
   padding-right: 10px;
   margin-bottom: 15px;
+  display: flex;
+  flex-direction: column; /* Ensure messages are stacked vertically */
 }
 
 /* Individual message */
@@ -30,10 +32,10 @@
   padding: 10px;
   background-color: #e1e1e1;
   border-radius: 5px;
-  max-width: 80%;
+  width: 100%; /* Make messages take up the full width of the container */
   word-wrap: break-word;
   display: flex;
-  flex-direction: row; /* Change column to row to align messages horizontally */
+  flex-direction: row; /* Align message content horizontally */
   align-items: center; /* Align items horizontally */
 }
 

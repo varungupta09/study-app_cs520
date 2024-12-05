@@ -23,10 +23,10 @@ const HomePage = () => {
             className="home-button primary"
             onClick={redirectToCreateStudySet}
           >
-            Create New Project
+            Create Study Set
           </button>
             <Link to="/project-library" className="home-button secondary">
-              View Project Library
+              View Study Set Library
             </Link>
         </div>
       </div>

@@ -5,12 +5,13 @@ import './GenerateQuizPage.css';
 
 const GenerateQuizPage = () => {
   const { studySetId } = useParams();
-  const navigate = useNavigate();  // Initialize navigate hook
+  const navigate = useNavigate();
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState(null);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ show: false, quizId: null });
+  const [numQuestions, setNumQuestions] = useState(10); // Default to 10 questions
 
   const maxQuizzes = 5;
 
@@ -43,7 +44,7 @@ const GenerateQuizPage = () => {
       const response = await fetch(`http://localhost:5001/api/study-set/${studySetId}/quizzes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: 'New Quiz', questions: [] }), // Example, customize as needed
+        body: JSON.stringify({ name: 'New Quiz', numQuestions: numQuestions, questions: [] }), // Pass numQuestions
       });
 
       if (!response.ok) throw new Error('Failed to create a quiz.');
@@ -78,9 +79,15 @@ const GenerateQuizPage = () => {
     navigate(`/quiz/${studySetId}/${quizId}`);
   };
 
-  // Navigate to the study set page when clicking the "Return to Study Set" button
   const handleReturnToStudySet = () => {
     navigate(`/study-sets/${studySetId}`);
+  };
+
+  const handleNumQuestionsChange = (e) => {
+    const value = e.target.value;
+    if (value >= 1) {
+      setNumQuestions(value);
+    }
   };
 
   if (loading) return <p>Loading quizzes...</p>;
@@ -91,6 +98,19 @@ const GenerateQuizPage = () => {
       <h1>Quizzes for Study Set {studySetId}</h1>
 
       {quizzes.length === 0 && <p>No quizzes created yet.</p>}
+
+      {/* Input box for number of questions */}
+      <div className="questions-input">
+        <label htmlFor="numQuestions">Enter the Number of Multiple Choice Questions:</label>
+        <input
+          type="number"
+          id="numQuestions"
+          value={numQuestions}
+          onChange={handleNumQuestionsChange}
+          min="1"
+        />
+      </div>
+
       <div className="buttons-container">
         <button
           onClick={handleCreateQuiz}
@@ -100,7 +120,6 @@ const GenerateQuizPage = () => {
           {creating ? 'Waiting for quiz creation...' : 'Create Quiz'}
         </button>
 
-        {/* Return to Study Set Button */}
         <button
           onClick={handleReturnToStudySet}
           className="return-to-study-set-button"
@@ -108,6 +127,7 @@ const GenerateQuizPage = () => {
           Return to Study Set
         </button>
       </div>
+
       {quizzes.length > 0 && (
         <div className="quizzes-list">
           <h2>Existing Quizzes</h2>
@@ -115,7 +135,7 @@ const GenerateQuizPage = () => {
             {quizzes.map((quiz, index) => (
               <li key={quiz.id} className="quiz-item">
                 <div className="quiz-box" onClick={() => handleQuizClick(quiz.id)}>
-                  Study Quiz {index + 1}
+                  View Quiz {index + 1}
                 </div>
                 <button
                   onClick={() => confirmDelete(quiz.id)}
