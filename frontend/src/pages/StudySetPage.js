@@ -158,6 +158,7 @@ const StudySetPage = () => {
       const data = await response.json();
       alert(data.message || "Study set shared successfully.");
       setShowShareModal(false); // Close the modal
+      setUsername([]);
     } catch (error) {
       setError(error.message);
     }
@@ -310,13 +311,7 @@ const StudySetPage = () => {
               {studySet.files.length > 0 ? (
                 studySet.files.map((file, index) => (
                   <li key={index}>
-                    <a
-                      href={`http://localhost:5001/${file.file_path}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {file.file_path}
-                    </a>
+                    <span>{file.file_path.split('/').pop()}</span> {/* Extract and display only the file name */}
                   </li>
                 ))
               ) : (

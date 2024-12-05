@@ -58,8 +58,9 @@
 
 .home-buttons {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  flex-direction: column; /* Stack buttons vertically */
+  gap: 20px; /* Add space between the buttons */
+  align-items: center; /* Center-align buttons horizontally */
 }
 
 .home-button {
@@ -68,15 +69,17 @@
   font-size: 1rem;
   font-weight: bold;
   border-radius: 8px;
-  text-decoration: none;
+  text-decoration: none; /* Ensures links don't have an underline */
   text-align: center;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Primary button (used for buttons and links styled as primary) */
 .home-button.primary {
   background: linear-gradient(to right, #004aad, #007bff);
   color: white;
+  border: none; /* Ensures links styled as buttons don't have borders */
 }
 
 .home-button.primary:hover {
@@ -85,6 +88,7 @@
   box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
 }
 
+/* Secondary button (used for buttons and links styled as secondary) */
 .home-button.secondary {
   background-color: white;
   color: #004aad;
@@ -96,6 +100,13 @@
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 123, 255, 0.15);
 }
+
+/* Focus state (same for both primary and secondary buttons) */
+.home-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3); /* Blue focus ring */
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {

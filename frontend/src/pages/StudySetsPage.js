@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './StudySetsPage.css'; // Ensure this line is correctly importing your CSS file
 
 // Function to fetch the user's own study sets
@@ -45,6 +45,7 @@ const StudySetsPage = () => {
 
   const userId = localStorage.getItem('userId');
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Fetch both own and shared study sets when the component mounts
   useEffect(() => {
@@ -55,6 +56,12 @@ const StudySetsPage = () => {
       console.error('User not logged in. Cannot fetch study sets.');
     }
   }, [userId]);
+
+  useEffect(() => {
+    if (location.state?.openModal) {
+      setIsModalOpen(true);
+    }
+  }, [location.state]);
 
   const toggleModal = useCallback(() => {
     setIsModalOpen((prevState) => !prevState);

@@ -13,7 +13,6 @@ const db = require('../database'); // Database connection module
  * @param {object} res - Express response object used to send the success/error response.
  */
 const saveQuizScore = (req, res) => { 
-  console.log(req.body)
   const { userId, quizId, score } = req.body; // Extracting the required fields from the request body
 
   // Validate if the required fields are provided in the request
