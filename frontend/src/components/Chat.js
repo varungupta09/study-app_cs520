@@ -5,7 +5,6 @@ const Chat = ({ studySetId, userId }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const socketRef = React.useRef(null);
 
   // Fetch chat messages when the component mounts or when the studySetId changes
   const fetchMessages = async () => {
@@ -28,38 +27,9 @@ const Chat = ({ studySetId, userId }) => {
     setLoading(false);
   };
 
-  // Setup WebSocket connection for real-time message updates
-  const setupWebSocket = () => {
-    socketRef.current = new WebSocket(`ws://localhost:5001/ws/chats/${studySetId}`);
-
-    socketRef.current.onopen = () => {
-      console.log('WebSocket connected');
-    };
-
-    socketRef.current.onmessage = (event) => {
-      const newMessage = JSON.parse(event.data);
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    };
-
-    socketRef.current.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    socketRef.current.onclose = () => {
-      console.log('WebSocket disconnected');
-    };
-  };
-
-  // Cleanup WebSocket when the component unmounts or studySetId changes
+  // UseEffect to fetch messages initially or when the studySetId changes
   useEffect(() => {
     fetchMessages();
-    setupWebSocket();
-
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.close();
-      }
-    };
   }, [studySetId]); // Depend on studySetId
 
   // Handle the message input change
@@ -93,6 +63,9 @@ const Chat = ({ studySetId, userId }) => {
 
       const newMessage = await response.json();
       console.log('New message added:', newMessage);
+
+      // Refetch messages to reflect the newly added message
+      fetchMessages();
 
       setNewMessage(''); // Reset input field after sending
     } catch (error) {

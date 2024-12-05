@@ -82,20 +82,20 @@ const GenerateGuidePage = () => {
   return (
     <div className="generate-guide-page">
       <h1>Study Guides for Study Set {studySetId}</h1>
+      <div className="buttons-container">
+        <button
+          onClick={handleCreateStudyGuide}
+          disabled={creating}
+          className="create-guide-button"
+        >
+          {creating ? 'Waiting for study guide creation...' : 'Create Study Guide'}
+        </button>
 
-      <button onClick={handleReturnToStudySet} className="return-button">
-        Return to Study Set
-      </button>
-
+        <button onClick={handleReturnToStudySet} className="return-button">
+          Return to Study Set
+        </button>
+      </div>
       {studyGuides.length === 0 && <p>No study guides created yet.</p>}
-
-      <button
-        onClick={handleCreateStudyGuide}
-        disabled={creating}
-        className="create-guide-button"
-      >
-        {creating ? 'Waiting for study guide creation...' : 'Create Study Guide'}
-      </button>
 
       {studyGuides.length > 0 && (
         <div className="study-guides-list">

@@ -91,23 +91,23 @@ const GenerateQuizPage = () => {
       <h1>Quizzes for Study Set {studySetId}</h1>
 
       {quizzes.length === 0 && <p>No quizzes created yet.</p>}
+      <div className="buttons-container">
+        <button
+          onClick={handleCreateQuiz}
+          disabled={creating}
+          className="create-quiz-button"
+        >
+          {creating ? 'Waiting for quiz creation...' : 'Create Quiz'}
+        </button>
 
-      <button
-        onClick={handleCreateQuiz}
-        disabled={creating}
-        className="create-quiz-button"
-      >
-        {creating ? 'Waiting for quiz creation...' : 'Create Quiz'}
-      </button>
-
-      {/* Return to Study Set Button */}
-      <button
-        onClick={handleReturnToStudySet}
-        className="return-to-study-set-button"
-      >
-        Return to Study Set
-      </button>
-
+        {/* Return to Study Set Button */}
+        <button
+          onClick={handleReturnToStudySet}
+          className="return-to-study-set-button"
+        >
+          Return to Study Set
+        </button>
+      </div>
       {quizzes.length > 0 && (
         <div className="quizzes-list">
           <h2>Existing Quizzes</h2>

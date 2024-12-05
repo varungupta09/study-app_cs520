@@ -44,16 +44,25 @@ button:hover:not(:disabled) {
   color: white;
 }
 
-.return-button {
-  background-color: #f0f0f0;
-  color: #333;
-  margin-bottom: 20px;
+/* Add this to the parent container of the buttons */
+.buttons-container {
+  display: flex;
+  gap: 20px; /* Adjust the space between the buttons */
+  justify-content: center; /* Optional: centers the buttons horizontally */
+  margin-top: 20px; /* Optional: space above the buttons */
 }
 
+/* Adjust button styles as needed */
 .create-guide-button {
   background-color: #28a745;
   color: white;
-  margin-top: 20px;
+  padding: 10px 20px;
+}
+
+.return-button {
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 10px 20px;
 }
 
 .delete-guide-button {

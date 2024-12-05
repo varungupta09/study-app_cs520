@@ -79,9 +79,16 @@ const GenerateStudyPlanPage = () => {
         onChange={(e) => setDays(e.target.value)}
         placeholder="Enter number of days"
       />
-      <button onClick={handleGenerateStudyPlan} disabled={loading}>
-        {loading ? 'Generating...' : 'Generate Study Plan'}
-      </button>
+      <div className="button-container">
+
+        <button onClick={handleGenerateStudyPlan} disabled={loading}>
+          {loading ? 'Generating...' : 'Generate Study Plan'}
+        </button>
+
+        <button onClick={handleReturnToStudySet} className="return-button">
+          Return to Study Set
+        </button>
+      </div>
       {error && <p className="error">{error}</p>}
 
       <div className="plans-container">
@@ -120,11 +127,6 @@ const GenerateStudyPlanPage = () => {
           </button>
         </div>
       )}
-
-      {/* Return to Study Set Button */}
-      <button onClick={handleReturnToStudySet} className="return-button">
-        Return to Study Set
-      </button>
     </div>
   );
 };
