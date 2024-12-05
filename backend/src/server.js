@@ -9,6 +9,7 @@ const authRoutes = require('./routes/authRoutes');
 const studyRoutes = require('./routes/studyRoutes');
 const shareRoutes = require('./routes/shareRoutes');
 const quizRoutes = require('./routes/quizRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 
 // Enable CORS (Cross-Origin Resource Sharing)
 /**
@@ -106,6 +107,9 @@ app.use('/api/quizzes', quizRoutes);
   * @param {object} res - Express response object used to send static files.
   */
 app.use(express.static(path.join(__dirname, '../../frontend/build')));
+
+// Use chat routes
+app.use('/api/chats', chatRoutes);
 
 // Export the app for testing
 module.exports = app;

@@ -233,4 +233,22 @@ db.run(`
   }
 });
 
+db.run(`
+  CREATE TABLE IF NOT EXISTS study_set_chats (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    study_set_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    message TEXT NOT NULL,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (study_set_id) REFERENCES study_sets(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  )
+`, (err) => {
+  if (err) {
+    console.error('Error creating study_set_chats table:', err);
+  } else {
+    console.log('Study set chats table ready.');
+  }
+});
+
 module.exports = db;
