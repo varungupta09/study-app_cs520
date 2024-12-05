@@ -13,7 +13,6 @@ const Leaderboard = ({ quizId }) => {
       const response = await fetch(`http://localhost:5001/api/quizzes/${quizId}/scores`);
       if (!response.ok) throw new Error('Failed to fetch leaderboard data.');
       const data = await response.json();
-
       // Filter and group by user to keep only their best score
       const userBestScores = Object.values(
         data.scores.reduce((acc, score) => {
@@ -62,7 +61,7 @@ const Leaderboard = ({ quizId }) => {
                 <td>{index + 1}</td>
                 <td>{score.username}</td>
                 <td>{(score.score * 100).toFixed(2)}%</td>
-                <td>{new Date(score.taken_date).toLocaleDateString()}</td>
+                <td>{new Date(score.taken_date.replace(" ", "T")).toLocaleDateString()}</td>
               </tr>
             ))}
           </tbody>
