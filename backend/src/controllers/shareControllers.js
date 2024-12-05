@@ -12,23 +12,38 @@ const db = require('../database');
  * @param {object} res - Express response object used to send the success/error response.
  */
 const shareStudySet = (req, res) => {
-  const { studySetId, sharedWithUserId, sharedByUserId } = req.body;
+  const { studySetId, sharedWithUsername, sharedByUserId } = req.body;
 
-  const query = `
-    INSERT INTO study_set_shares (study_set_id, shared_with_user_id, shared_by_user_id)
-    VALUES (?, ?, ?)
-  `;
-
-  db.run(query, [studySetId, sharedWithUserId, sharedByUserId], (err) => {
+  // Query the database for the user with the provided username (email)
+  db.get('SELECT * FROM users WHERE username = ?', [sharedWithUsername], async (err, user) => {
     if (err) {
-      if (err.message.includes('UNIQUE constraint failed')) {
-        res.status(400).json({ error: 'Study set already shared with this user.' });
-      } else {
-        res.status(500).json({ error: 'Error sharing study set.' });
-      }
-    } else {
-      res.status(200).json({ message: 'Study set shared successfully.' });
+      console.error(err); // Log database query error
+      return res.status(500).send('Error fetching user.');
     }
+
+    if (!user) {
+      return res.status(404).send('User not found.');
+    }
+
+    const sharedWithUserId = user.id; // Retrieve the user ID
+
+    const query = `
+      INSERT INTO study_set_shares (study_set_id, shared_with_user_id, shared_by_user_id)
+      VALUES (?, ?, ?)
+    `;
+
+    // Execute the insert query
+    db.run(query, [studySetId, sharedWithUserId, sharedByUserId], (err) => {
+      if (err) {
+        if (err.message.includes('UNIQUE constraint failed')) {
+          res.status(400).json({ error: 'Study set already shared with this user.' });
+        } else {
+          res.status(500).json({ error: 'Error sharing study set.' });
+        }
+      } else {
+        res.status(200).json({ message: 'Study set shared successfully.' });
+      }
+    });
   });
 };
 

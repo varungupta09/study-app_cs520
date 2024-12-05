@@ -60,6 +60,18 @@ h1 {
   padding-top: 20px;
   /* Push the icons down from the top */
 }
+.share-icon {
+  font-size: 1.2rem;
+  /* Smaller and sleeker icons */
+  cursor: pointer;
+  /* Adds pointer cursor on hover */
+  color: #007bff;
+  /* Default color for icons */
+  transition: color 0.3s;
+  /* Adds smooth color change on hover */
+  padding-top: 20px;
+  /* Push the icons down from the top */
+}
 
 .edit-icon:hover {
   color: #28a745;
@@ -203,24 +215,38 @@ button:focus {
 
 /* Delete Confirmation Modal */
 .delete-confirmation-modal {
-  background-color: rgba(0, 0, 0, 0.6);
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
 }
 
-.delete-confirmation-modal>div {
-  background-color: white;
-  padding: 30px;
-  border-radius: 8px;
+.delete-confirmation-modal p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
   text-align: center;
-  width: 300px;
+}
+
+.confirm-delete-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.confirm-delete-button:hover {
+  background-color: #d32f2f;
+}
+
+.cancel-delete-button {
+  background-color: #ccc;
+}
+
+.cancel-delete-button:hover {
+  background-color: #aaa;
 }
 
 /* Button Group */
@@ -257,4 +283,51 @@ button:focus {
   margin: 0 auto;
   max-width: 900px;
   position: relative;
+}
+
+/* Share Modal */
+.share-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+.modal-content h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.input-field {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.modal-actions button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.confirm-button {
+  background-color: #00796b;
+  color: white;
+}
+
+.cancel-button {
+  background-color: #ccc;
 }

@@ -2,13 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './StudySetsPage.css'; // Ensure this line is correctly importing your CSS file
 
-const fetchStudySetsFromAPI = async (userId, setStudySets) => {
+// Function to fetch the user's own study sets
+const fetchOwnStudySetsFromAPI = async (userId, setOwnStudySets) => {
   try {
     const response = await fetch(`http://localhost:5001/api/study-sets?userId=${userId}`);
     if (response.ok) {
       const data = await response.json();
       console.log('New Study Set:', data);
-      setStudySets(data);
+      setOwnStudySets(data);
     } else {
       console.error('Failed to fetch study sets.');
     }
@@ -17,8 +18,26 @@ const fetchStudySetsFromAPI = async (userId, setStudySets) => {
   }
 };
 
+// Function to fetch study sets shared with the user
+const fetchSharedStudySetsFromAPI = async (userId, setSharedStudySets) => {
+  try {
+    const response = await fetch(`http://localhost:5001/api/share/shared-with-me/${userId}`);
+    console.log("hi")
+    console.log(response)
+    if (response.ok) {
+      const data = await response.json();
+      setSharedStudySets(data);
+    } else {
+      console.error('Failed to fetch shared study sets.');
+    }
+  } catch (error) {
+    console.error('Error fetching shared study sets:', error);
+  }
+};
+
 const StudySetsPage = () => {
-  const [studySets, setStudySets] = useState([]);
+  const [ownStudySets, setOwnStudySets] = useState([]);
+  const [sharedStudySets, setSharedStudySets] = useState([]);
   const [newStudySetName, setNewStudySetName] = useState('');
   const [newStudySetDescription, setNewStudySetDescription] = useState('');
   const [files, setFiles] = useState([]);
@@ -27,9 +46,11 @@ const StudySetsPage = () => {
   const userId = localStorage.getItem('userId');
   const navigate = useNavigate();
 
+  // Fetch both own and shared study sets when the component mounts
   useEffect(() => {
     if (userId) {
-      fetchStudySetsFromAPI(userId, setStudySets);
+      fetchOwnStudySetsFromAPI(userId, setOwnStudySets);
+      fetchSharedStudySetsFromAPI(userId, setSharedStudySets);
     } else {
       console.error('User not logged in. Cannot fetch study sets.');
     }
@@ -67,12 +88,10 @@ const StudySetsPage = () => {
         const newStudySet = await response.json();
         console.log('New Study Set:', newStudySet);
 
-        setStudySets((prevStudySets) => {
-          const updatedStudySets = [...prevStudySets, newStudySet];
-          console.log('Updated Study Set List:', updatedStudySets); // Log here
-          return updatedStudySets;
-        });
-
+        setOwnStudySets((prevOwnStudySets) => [
+          ...prevOwnStudySets,
+          newStudySet,
+        ]);
         setNewStudySetName('');
         setNewStudySetDescription('');
         setFiles([]);
@@ -104,24 +123,42 @@ const StudySetsPage = () => {
         </button>
 
         <div className="study-sets-list">
-          {studySets.length === 0 ? (
+          {ownStudySets.length === 0 && sharedStudySets.length === 0 ? (
             <p>
               No study sets exist for your account. Start by creating a new
-              study set!
+              study set or accepting shared study sets!
             </p>
           ) : (
-            <ul>
-              {studySets.map((studySet) => (
-                <li
-                  key={studySet.id || studySet.name}
-                  className="study-set-item"
-                  onClick={() => handleStudySetClick(studySet.id)}
-                >
-                  <h3>{studySet.name}</h3>
-                  <p>{studySet.description || "No description available"}</p>
-                </li>
-              ))}
-            </ul>
+            <>
+              <h2>Your Study Sets</h2>
+              <ul>
+                {ownStudySets.map((studySet) => (
+                  <li
+                    key={studySet.id || studySet.name}
+                    className="study-set-item"
+                    onClick={() => handleStudySetClick(studySet.id)}
+                  >
+                    <h3>{studySet.name}</h3>
+                    <p>{studySet.description || 'No description available'}</p>
+                  </li>
+                ))}
+              </ul>
+
+              <h2>Shared Study Sets</h2>
+              <ul>
+                {sharedStudySets.map((studySet) => (
+                  <li
+                    key={studySet.id || studySet.name}
+                    className="study-set-item"
+                    onClick={() => handleStudySetClick(studySet.id)}
+                  >
+                    <h3>{studySet.name}</h3>
+                    <p>{studySet.description || 'No description available'}</p>
+                    <p>Shared by: {studySet.shared_by}</p>
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
         </div>
 

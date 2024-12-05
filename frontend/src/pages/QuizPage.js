@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './QuizPage.css';
 
 const QuizPage = () => {
+  const userId = localStorage.getItem('userId');
   const { studySetId, quizId } = useParams();
   const navigate = useNavigate();
   const [quiz, setQuiz] = useState([]);
@@ -42,7 +43,6 @@ const QuizPage = () => {
 
   const handleScoreSubmission = async (score) => {
     try {
-      const userId = 1; // Replace with dynamic userId if available
       const response = await fetch('http://localhost:5001/api/quizzes/scores', {
         method: 'POST',
         headers: {

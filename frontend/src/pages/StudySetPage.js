@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { GrFormPreviousLink } from "react-icons/gr"; // Import the back link icon
 import { MdEdit, MdDelete } from "react-icons/md"; // Import the edit and delete icons
+import { AiOutlineShareAlt } from "react-icons/ai"; // Import share icon
 import "./StudySetPage.css";
 
 const StudySetPage = () => {
+  const userId = localStorage.getItem('userId');
   const { studySetId } = useParams();
   const [studySet, setStudySet] = useState({
     name: "",
@@ -18,6 +20,8 @@ const StudySetPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [username, setUsername] = useState("");
+  const [showShareModal, setShowShareModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -127,6 +131,38 @@ const StudySetPage = () => {
     }
   };
 
+  // Handle sharing the study set
+  const handleShareStudySet = async () => {
+    if (!username) {
+      alert("Please enter a username.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5001/api/share", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          studySetId,
+          sharedWithUsername: username, // Assuming 'username' is the user ID
+          sharedByUserId: userId, // Replace with the actual current user's ID
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to share the study set.");
+      }
+
+      const data = await response.json();
+      alert(data.message || "Study set shared successfully.");
+      setShowShareModal(false); // Close the modal
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   if (loading) return <p>Loading study set...</p>;
   if (error) return <p className="error">{error}</p>;
 
@@ -155,10 +191,38 @@ const StudySetPage = () => {
                   onClick={() => setShowDeleteConfirmation(true)}
                   className="delete-icon"
                 />
+                <AiOutlineShareAlt
+                  onClick={() => setShowShareModal(true)} // Open share modal
+                  className="share-icon"
+                />
               </>
             )}
           </div>
         </div>
+
+        {/* Modal for sharing */}
+          {showShareModal && (
+            <div className="share-modal">
+              <div className="modal-content">
+                <h3>Share Study Set</h3>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter username"
+                  className="input-field"
+                />
+                <div className="modal-actions">
+                  <button onClick={handleShareStudySet} className="confirm-button">
+                    Share
+                  </button>
+                  <button onClick={() => setShowShareModal(false)} className="cancel-button">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
         {editMode ? (
           <div className="edit-mode">
@@ -313,3 +377,6 @@ const StudySetPage = () => {
 };
 
 export default StudySetPage;
+
+
+
