@@ -13,7 +13,7 @@ const NewProjectPage = () => {
   return (
     <div className="create-project-container">
       <div className="create-project-form">
-        <h2>Create a New Study Project</h2>
+        <h2>Create New Project</h2>
         <form onSubmit={handleSubmit}>
           <input
             type="text"

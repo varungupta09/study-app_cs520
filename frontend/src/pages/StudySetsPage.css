@@ -1,64 +1,91 @@
-/* General styles */
-body {
+.study-page-container {
   font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #e0f7fa, #a29bfe);
+  min-height: 100vh;
   margin: 0;
   padding: 0;
-  background: linear-gradient(to bottom, #e0f7fa, #a29bfe);
 }
 
 .study-sets-page {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
+  max-width: 600px;
+  height: 550px;
+  width: 90%;
+  padding: 40px;
+  /* Adds more spacing for a larger look */
   background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  /* Softer, larger border-radius */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  /* Deeper shadow for better effect */
+  text-align: center;
+  /* Center the text inside */
 }
 
 h1 {
   text-align: center;
-  color: #333;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  color: #004aad;
+  background: linear-gradient(to right, #004aad, #66bbff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Button styles */
 .create-study-set-button {
   display: inline-block;
-  margin: 20px 0;
-  padding: 10px 20px;
+  margin: 20px auto;
+  padding: 12px 20px;
+  /* Compact padding */
   background-color: #007bff;
+  /* Solid color for simplicity */
   color: white;
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 600;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
+  /* Subtle rounded edges */
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center;
+  max-width: fit-content;
+  /* Prevents the button from stretching */
 }
 
 .create-study-set-button:hover {
   background-color: #0056b3;
+  /* Slightly darker on hover */
+  transform: scale(1.05);
+  /* Gentle scaling effect */
 }
 
+/* Study Set List */
 .study-sets-list ul {
   list-style: none;
   padding: 0;
 }
 
 .study-set-item {
-  padding: 15px;
-  margin: 10px 0;
+  padding: 20px;
+  margin: 15px 0;
   background-color: #fafafa;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
+  text-align: left;
 }
 
 .study-set-item:hover {
   background-color: #e9ecef;
+  transform: translateY(-5px);
+  /* Lift effect on hover */
 }
 
 .study-set-item h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 20px;
   color: #333;
 }
 

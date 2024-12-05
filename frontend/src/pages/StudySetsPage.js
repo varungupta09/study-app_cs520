@@ -95,88 +95,96 @@ const StudySetsPage = () => {
   };
 
   return (
-    <div className="study-sets-page">
-      <h1>Study Sets</h1>
+    <div className="study-page-container">
+      <div className="study-sets-page">
+        <h1>Study Sets</h1>
 
-      <button onClick={toggleModal} className="create-study-set-button">
-        Create New Study Set
-      </button>
+        <button onClick={toggleModal} className="create-study-set-button">
+          Create New Study Set
+        </button>
 
-      <div className="study-sets-list">
-        {studySets.length === 0 ? (
-          <p>No study sets exist for your account. Start by creating a new study set!</p>
-        ) : (
-          <ul>
-            {studySets.map((studySet) => (
-              <li
-                key={studySet.id || studySet.name}
-                className="study-set-item"
-                onClick={() => handleStudySetClick(studySet.id)}
-              >
-                <h3>{studySet.name}</h3>
-                <p>{studySet.description || 'No description available'}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+        <div className="study-sets-list">
+          {studySets.length === 0 ? (
+            <p>
+              No study sets exist for your account. Start by creating a new
+              study set!
+            </p>
+          ) : (
+            <ul>
+              {studySets.map((studySet) => (
+                <li
+                  key={studySet.id || studySet.name}
+                  className="study-set-item"
+                  onClick={() => handleStudySetClick(studySet.id)}
+                >
+                  <h3>{studySet.name}</h3>
+                  <p>{studySet.description || "No description available"}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Create New Study Set</h2>
-            <input
-              type="text"
-              placeholder="Study Set Name"
-              value={newStudySetName}
-              onChange={(e) => setNewStudySetName(e.target.value)}
-              className="input-field"
-            />
-            <textarea
-              placeholder="Study Set Description (optional)"
-              value={newStudySetDescription}
-              onChange={(e) => setNewStudySetDescription(e.target.value)}
-              className="input-field"
-            ></textarea>
-
-            <div className="file-upload">
-              <label htmlFor="file-upload" className="custom-file-upload">
-                Choose Files
-              </label>
+        {isModalOpen && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2>Create New Study Set</h2>
               <input
-                type="file"
-                id="file-upload"
-                onChange={handleFileChange}
-                multiple
-                className="input-field file-input"
-                accept=".txt,.doc,.docx,.ppt,.pptx,.pdf"
+                type="text"
+                placeholder="Study Set Name"
+                value={newStudySetName}
+                onChange={(e) => setNewStudySetName(e.target.value)}
+                className="input-field"
               />
-              {files.length > 0 && (
-                <div className="file-list">
-                  <h4>Uploaded Files:</h4>
-                  <ul>
-                    {files.map((file, index) => (
-                      <li key={index}>{file.name}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              <p className="file-types-info">
-                Accepted file types: .txt, .doc, .docx, .ppt, .pptx
-              </p>
-            </div>
+              <textarea
+                placeholder="Study Set Description (optional)"
+                value={newStudySetDescription}
+                onChange={(e) => setNewStudySetDescription(e.target.value)}
+                className="input-field"
+              ></textarea>
 
-            <div className="modal-actions">
-              <button onClick={toggleModal} className="cancel-button">
-                Cancel
-              </button>
-              <button onClick={handleCreateStudySet} className="confirm-button">
-                Create
-              </button>
+              <div className="file-upload">
+                <label htmlFor="file-upload" className="custom-file-upload">
+                  Choose Files
+                </label>
+                <input
+                  type="file"
+                  id="file-upload"
+                  onChange={handleFileChange}
+                  multiple
+                  className="input-field file-input"
+                  accept=".txt,.doc,.docx,.ppt,.pptx,.pdf"
+                />
+                {files.length > 0 && (
+                  <div className="file-list">
+                    <h4>Uploaded Files:</h4>
+                    <ul>
+                      {files.map((file, index) => (
+                        <li key={index}>{file.name}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <p className="file-types-info">
+                  Accepted file types: .txt, .doc, .docx, .ppt, .pptx
+                </p>
+              </div>
+
+              <div className="modal-actions">
+                <button onClick={toggleModal} className="cancel-button">
+                  Cancel
+                </button>
+                <button
+                  onClick={handleCreateStudySet}
+                  className="confirm-button"
+                >
+                  Create
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
