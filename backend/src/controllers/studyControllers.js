@@ -673,6 +673,7 @@ const getQuizForStudySet = (req, res) => {
  */
 const createQuiz = (req, res) => {
   const { id: studySetId } = req.params;
+  const { name, numQuestions, questions } = req.body;
 
   // Step 1: Fetch all files for the given study set from the database
   db.all('SELECT file_path FROM study_set_files WHERE study_set_id = ?', [studySetId], (err, rows) => {
@@ -689,7 +690,7 @@ const createQuiz = (req, res) => {
     const filePaths = rows.map(row => row.file_path);
 
     // Step 3: Pass the file paths to the gemini.createQuiz function
-    gemini.createQuiz(filePaths, 2)
+    gemini.createQuiz(filePaths, numQuestions)
       .then(guideContent => {
         // Step 4: Use the result as the quiz content
         db.run(

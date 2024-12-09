@@ -11,7 +11,7 @@ const GenerateQuizPage = () => {
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState(null);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ show: false, quizId: null });
-  const [numQuestions, setNumQuestions] = useState(10); // Default to 10 questions
+  const [numQuestions, setNumQuestions] = useState(5); // Default to 10 questions
 
   const maxQuizzes = 5;
 
