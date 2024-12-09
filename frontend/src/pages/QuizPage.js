@@ -12,7 +12,7 @@ const QuizPage = () => {
   const [userAnswers, setUserAnswers] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [feedback, setFeedback] = useState([]);
-  const [score, setScore] = useState(0);  // Store score
+  const [score, setScore] = useState(0); // Store score
 
   // Fetch quiz questions
   const fetchQuiz = async () => {
@@ -99,36 +99,44 @@ const QuizPage = () => {
         <h2>Questions</h2>
         {quiz.map((question, index) => (
           <div key={index} className="question-item">
-            <p>{question.question}</p>
+            {/* Render the question in bold with a number */}
+            <p className="question">
+              <strong>{`Q${index + 1}: ${question.question}`}</strong>
+            </p>
 
-            {question.answers.map((answer, answerIndex) => (
-              <div key={answerIndex} className="answer-option">
-                <label>
-                  <input
-                    type="radio"
-                    name={`question-${index}`}
-                    value={answerIndex}
-                    checked={userAnswers[index] === answerIndex}
-                    onChange={() => handleAnswerChange(index, answerIndex)}
-                    disabled={submitted} // Disable inputs after submission
-                  />
-                  {answer}
-                </label>
-              </div>
-            ))}
+            {/* Render answers in a horizontal layout */}
+            <div className="answers-container">
+              {question.answers.map((answer, answerIndex) => (
+                <div key={answerIndex} className="answer-option">
+                  <label>
+                    <input
+                      type="radio"
+                      name={`question-${index}`}
+                      value={answerIndex}
+                      checked={userAnswers[index] === answerIndex}
+                      onChange={() => handleAnswerChange(index, answerIndex)}
+                      disabled={submitted} // Disable inputs after submission
+                    />
+                    {answer}
+                  </label>
+                </div>
+              ))}
+            </div>
 
+            {/* Show feedback after submission */}
             {submitted && (
               <p
                 className={
                   feedback[index] ? 'correct-answer' : 'incorrect-answer'
                 }
               >
-                {feedback[index] ? 'Correct' : 'Incorrect'}
+                {feedback[index] ? 'Correct' : `Incorrect! Correct answer: ${question.answers[question.correctAnswer]}`}
               </p>
             )}
           </div>
         ))}
 
+        {/* Submission buttons */}
         {!submitted && (
           <div className="quiz-buttons">
             <button onClick={handleSubmit} className="submit-quiz-button">
@@ -140,6 +148,7 @@ const QuizPage = () => {
           </div>
         )}
 
+        {/* Feedback after submission */}
         {submitted && (
           <div className="quiz-feedback">
             <h3>Feedback</h3>
@@ -154,7 +163,8 @@ const QuizPage = () => {
               </div>
             ))}
 
-            <h4>Your Score: {score}/{quiz.length}</h4> {/* Display score as a fraction */}
+            {/* Display score */}
+            <h4>Your Score: {score}/{quiz.length}</h4>
 
             <button onClick={handleGoHome} className="go-home-button">
               Back to Quiz List
