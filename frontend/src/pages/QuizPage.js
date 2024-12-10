@@ -76,10 +76,11 @@ const QuizPage = () => {
 
     // Calculate score
     const correctAnswers = newFeedback.filter(Boolean).length;
+    const normalizedScore = correctAnswers / quiz.length; // Convert to decimal between 0-1
     setScore(correctAnswers); // Update score state
 
     // Submit score to backend
-    handleScoreSubmission(correctAnswers);
+    handleScoreSubmission(normalizedScore);
   };
 
   const handleGoHome = () => {
