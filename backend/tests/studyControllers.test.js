@@ -214,12 +214,29 @@ describe('Study Controllers', () => {
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
     });
+
+    it('should handle missing questions parameter', async () => {
+      // Create empty study set first
+      const emptySet = await request(app)
+        .post('/api/study-set')
+        .send({ userId: 1, name: 'Empty Quiz Set' });
+      
+      const response = await request(app)
+        .post(`/api/study-set/${emptySet.body.id}/quizzes`)
+        .send({}); 
+      expect(response.status).toBe(404);
+      expect(response.body.error).toBe('No files found for the given study set.');
+
+      // Clean up
+      await request(app).delete(`/api/study-set/${emptySet.body.id}`);
+    });
   });
 
   describe('Study Plan Operations', () => {
     let studySetWithFiles;
 
     beforeEach(async () => {
+      // Create study set with files
       const response = await request(app)
         .post('/api/study-set')
         .field('userId', '1')
@@ -256,6 +273,50 @@ describe('Study Controllers', () => {
         .get(`/api/study-set/${studySetWithFiles}/study-plans`);
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
+    });
+
+    it('should handle missing days parameter', async () => {
+      // Create empty study set first
+      const emptySet = await request(app)
+        .post('/api/study-set')
+        .send({ userId: 1, name: 'Empty Plan Set' });
+
+      // Create request for study plan with missing days parameter
+      const response = await request(app)
+        .post(`/api/study-set/${emptySet.body.id}/study-plan`)
+        .send({});
+
+      // Verify empty study set error is returned
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ error: 'No files found for the given study set.' });
+
+      // Clean up
+      await request(app).delete(`/api/study-set/${emptySet.body.id}`);
+    });
+  });
+
+  describe('Error Handling', () => {
+    it('should handle invalid study set ID', async () => {
+      const response = await request(app)
+        .get('/api/study-set/invalid');
+      expect(response.status).toBe(404);
+      expect(response.body.error).toBe('Study set not found.');
+    });
+
+    it('should handle missing user ID in request body', async () => {
+      const response = await request(app)
+        .post('/api/study-set')
+        .send({ name: 'Test Set' });
+      expect(response.status).toBe(400);
+      expect(response.body.error).toBe('User ID and Study Set name are required.');
+    });
+
+    it('should handle missing name in request body', async () => {
+      const response = await request(app)
+        .post('/api/study-set')
+        .send({ userId: 1 });
+      expect(response.status).toBe(400); 
+      expect(response.body.error).toBe('User ID and Study Set name are required.');
     });
   });
 });
