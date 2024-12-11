@@ -32,3 +32,6 @@ StudySphere is configured with a JSON web token for user authentication and a Go
 
 ## AI Models
 StudySphere uses the Google Gemini 1.5 model, which is effective for generating study materials while also being fast and cost-efficient.
+
+## Video Link
+https://drive.google.com/file/d/1lJsXINq24PdBmnm4La2r5P_Viksa87Gq/view?usp=sharing 
