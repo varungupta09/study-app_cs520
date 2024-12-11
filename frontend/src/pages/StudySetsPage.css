@@ -1,0 +1,241 @@
+.study-page-container {
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #e0f7fa, #a29bfe);
+  min-height: 150vh;
+  margin: 0;
+  padding: 0;
+}
+
+.study-sets-page {
+  max-width: 600px;
+  height: 900px;
+  width: 90%;
+  padding: 100px;
+  /* Adds more spacing for a larger look */
+  background-color: white;
+  border-radius: 16px;
+  /* Softer, larger border-radius */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  /* Deeper shadow for better effect */
+  text-align: center;
+  /* Center the text inside */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  color: #004aad;
+  background: linear-gradient(to right, #004aad, #66bbff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.create-study-set-button {
+  display: inline-block;
+  margin: 20px auto;
+  padding: 12px 20px;
+  /* Compact padding */
+  background-color: #007bff;
+  /* Solid color for simplicity */
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  /* Subtle rounded edges */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center;
+  max-width: fit-content;
+  /* Prevents the button from stretching */
+}
+
+.create-study-set-button:hover {
+  background-color: #0056b3;
+  /* Slightly darker on hover */
+  transform: scale(1.05);
+  /* Gentle scaling effect */
+}
+
+/* Study Set List */
+.study-sets-list {
+  display: flex; /* Make the two sections side by side */
+  justify-content: space-between; /* Space out the sections */
+  gap: 50px;
+  margin: 0;
+  margin-top: 20px;
+}
+
+.study-sets-list > div {
+  flex: 1; /* Each section should take up equal space */
+  min-width: 45%; /* Ensure they don't get too narrow */
+}
+
+.study-sets-list h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.study-sets-list ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.study-set-item {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.study-set-item:hover {
+  transform: scale(1.05);
+}
+
+.study-set-item h3 {
+  font-size: 1.2rem;
+  margin: 0 0 5px 0;
+}
+
+.study-set-item p {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.study-sets-list p {
+  color: #555;
+  font-size: 1rem;
+}
+
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h2 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.textarea-field {
+  height: 120px;
+}
+
+.file-upload {
+  margin: 20px 0;
+}
+
+.custom-file-upload {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.custom-file-upload:hover {
+  background-color: #0056b3;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-list {
+  margin-top: 10px;
+}
+
+.file-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.file-list li {
+  font-size: 14px;
+  color: #555;
+}
+
+.file-types-info {
+  font-size: 12px;
+  color: #888;
+}
+
+.modal-actions {
+  display: start;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-button,
+.confirm-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.cancel-button:hover {
+  background-color: #e0e0e0;
+}
+
+.confirm-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.confirm-button:hover {
+  background-color: #218838;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .study-sets-page {
+    padding: 15px;
+  }
+
+  .modal-content {
+    width: 90%;
+  }
+}

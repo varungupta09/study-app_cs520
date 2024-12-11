@@ -1,0 +1,74 @@
+/* Message list container */
+.messages {
+  flex-grow: 1;
+  width: 100%;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column; /* Ensure messages are stacked vertically */
+}
+
+.chat-header{
+  padding-bottom: 20px;
+}
+
+/* Individual message */
+.message {
+  margin: 8px 0;
+  padding: 10px;
+  background-color: #e1e1e1;
+  border-radius: 5px;
+  width: 100%; /* Make messages take up the full width of the container */
+  word-wrap: break-word;
+  display: flex;
+  flex-direction: row; /* Align message content horizontally */
+  align-items: center; /* Align items horizontally */
+}
+
+.message strong {
+  font-weight: bold;
+  margin-right: 10px; /* Add space between the strong tag and the rest of the message */
+}
+
+/* Input field */
+input[type='text'] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* Input field focus */
+input[type='text']:focus {
+  border-color: #6c6fff;
+  box-shadow: 0 0 5px rgba(108, 108, 255, 0.5);
+}
+
+/* Send button */
+button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+/* Button hover effect */
+button:hover {
+  background-color: #45a049;
+}
+
+/* Loading text */
+.loading {
+  font-style: italic;
+  color: #666;
+}

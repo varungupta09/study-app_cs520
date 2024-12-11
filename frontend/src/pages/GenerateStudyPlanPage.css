@@ -1,0 +1,101 @@
+.generate-study-plan-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto; /* Enable vertical scrolling */
+    background: linear-gradient(to bottom, #e0f7fa, #a29bfe);
+    min-height: 100vh;
+  }
+  
+  .generate-study-plan-page h1 {
+    margin-bottom: 20px;
+  }
+  
+  .generate-study-plan-page input {
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 200px;
+    font-size: 16px;
+  }
+  
+  .button-container {
+    display: flex;
+    gap: 50px; /* Adds space between buttons */
+    margin-top: 20px; /* Optional: add space above the buttons */
+  }
+
+  .generate-study-plan-page button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .generate-study-plan-page button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  .generate-study-plan-page .error {
+    color: red;
+    margin-top: 20px;
+  }
+  
+  .generate-study-plan-page .plans-container {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    width: 100%;
+    max-width: 600px;
+    background-color: #f9f9f9;
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 60vh; /* Limit the height to 60% of the viewport height */
+  }
+  
+  .generate-study-plan-page ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+  
+  .generate-study-plan-page li {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  .generate-study-plan-page .confirmation-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1000;
+  }
+  
+  .generate-study-plan-page .confirm-delete-button,
+  .generate-study-plan-page .cancel-delete-button {
+    margin: 10px 5px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .generate-study-plan-page .confirm-delete-button {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .generate-study-plan-page .cancel-delete-button {
+    background-color: #ccc;
+    color: black;
+  }
